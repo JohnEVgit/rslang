@@ -1,0 +1,39 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-width: 320px;
+  font-family: var(--font-main);
+
+  &__header {
+    min-width: 320px;
+  }
+
+  &__main {
+    width: 100%;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    flex: 1 0 auto;
+  }
+
+  &__footer {
+    position: sticky;
+    top: 100vh;
+    min-width: 320px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .page--has-active-nav {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

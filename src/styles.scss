@@ -26,6 +26,16 @@ html {
     scroll-behavior: smooth;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-width: 320px;
+    font-family: var(--font-main);
+}
+
 :focus {
     outline: none;
 }
@@ -71,31 +81,74 @@ button {
     font-family: var(--font-main);
 }
 
-.page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    background: var(--color-bg);
-    color: var(--color-text);
-    min-width: 320px;
-    font-family: var(--font-main);
-  
-    &__header {
-        min-width: 320px;
+.btn {
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+
+    &:disabled {
+        cursor: default;
+    }
+    
+    &--theme-primary {
+        border: none;
+        background: var(--color-main);
+        color: var(--color-bg-light);
+        padding: 5px 11px;
+        transition: background-color 0.2s;
+    
+        &:not(:disabled):hover {
+            background-color: var(--color-main-hover);
+        }
+
+        &.btn--is-active {
+            background-color: var(--color-secondary);
+            
+            &:hover {
+                background-color: var(--color-secondary);
+            }
+        }
     }
   
-    &__main {
-        width: 100%;
-        min-width: 320px;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        flex: 1 0 auto;
+    &--theme-secondary {
+        border: 1px solid var(--color-text);
+        color: var(--color-text);
+        background: var(--color-bg-light);
+        padding: 4px 10px;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    
+        &:not(:disabled):hover,
+        &.btn--is-active {
+            background-color: var(--color-main);
+            border-color: var(--color-main);
+            color: var(--color-bg-light);
+        }
     }
-  
-    &__footer {
-        position: sticky;
-        top: 100vh;
-        min-width: 320px;
+
+    &--theme-link {
+        border: none;
+        background: none;
+        padding: 0;
+        color: var(--color-text);
+        transition: color 0.2s;
+    
+        &:not(:disabled):hover {
+            color: var(--color-main);
+        }
+
+        &.btn--is-active {
+            color: var(--color-main);
+            
+            &:hover {
+                color: var(--color-main);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 }

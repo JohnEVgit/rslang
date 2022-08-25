@@ -1,0 +1,36 @@
+<header class="header">
+    <div class="header__inner wrapper">
+        <button class="header__toggle toggle-nav js-toggle-nav" type="button" 
+            title="Toggle menu" aria-label="Toggle menu"
+            (click)="toggleMenu()"
+            [class.toggle-nav--is-active]="isOpenMenu">
+            <span class="toggle-nav__inner"></span>
+        </button>
+        <a class="header__logo" href="/" (click)="closeMenu()">RSLang</a>
+        <nav class="header__nav nav"
+        [class.nav--is-active]="isOpenMenu">
+            <div class="nav__shadow" (click)="closeMenu()"></div>
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <a class="nav__link" href="#" (click)="closeMenu()">Главная</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="#" (click)="closeMenu()">Учебник</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="#" (click)="closeMenu()">Аудиовызов</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="#" (click)="closeMenu()">Спринт</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="#" (click)="closeMenu()">Статистика</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header__auth header-auth">
+            <button class="header-auth__btn btn btn--theme-link" type="button">Вход</button>
+            <button class="header-auth__btn btn btn--theme-primary" type="button">Регистрация</button>
+        </div>
+    </div>
+</header>
