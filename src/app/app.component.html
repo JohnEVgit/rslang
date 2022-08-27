@@ -1,3 +1,10 @@
-<h1>RSLang</h1>
-
-<router-outlet></router-outlet>
+<div class="page">
+    <div class="page__header">
+        <app-header (toggleMenuEvent)="openMenu($event)"></app-header>
+    </div>
+    <app-main></app-main>
+    <router-outlet></router-outlet>
+    <div class="page__footer">
+        <app-footer></app-footer>
+    </div>
+</div>

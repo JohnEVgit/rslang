@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'rslang';
+
+  isOpenMenu = false;
+
+  openMenu(isOpen: boolean) {
+    this.isOpenMenu = isOpen;
+  }
 }

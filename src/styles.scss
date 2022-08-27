@@ -1,2 +1,154 @@
 @import './assets/css/normalize.css';
 @import './assets/css/main.css';
+
+:root {
+    --color-main: tomato;
+    --color-main-hover: hsl(0, 70%, 64%);
+    --color-secondary: #c554f0;
+    --color-bg: #f3f3f3;
+    --color-bg-light: #fff;
+    --color-text: #252525;
+    --color-text-accent: #8d8d8d;
+
+    --color-border: #ddd;
+    --color-shadow: rgba(0, 0, 0, 0.15);
+    --color-shadow-dark: rgba(0, 0, 0, 0.3);
+    --color-popup-bg: rgba(243, 243, 243, 0.5);
+
+    --font-main: 'Open Sans', sans-serif;
+}
+
+html {
+    height: 100%;
+    min-height: 100%;
+    font-size: 14px;
+    line-height: 1.4;
+    scroll-behavior: smooth;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-width: 320px;
+    font-family: var(--font-main);
+}
+
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    box-shadow: 0 0 5px 1px var(--color-shadow-dark);
+}
+
+:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.visually-hidden {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+  
+.wrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    min-width: 320px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+button {
+    font-family: var(--font-main);
+}
+
+.btn {
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 5px;
+
+    &:disabled {
+        cursor: default;
+    }
+    
+    &--theme-primary {
+        border: none;
+        background: var(--color-main);
+        color: var(--color-bg-light);
+        padding: 5px 11px;
+        transition: background-color 0.2s;
+    
+        &:not(:disabled):hover {
+            background-color: var(--color-main-hover);
+        }
+
+        &.btn--is-active {
+            background-color: var(--color-secondary);
+            
+            &:hover {
+                background-color: var(--color-secondary);
+            }
+        }
+    }
+  
+    &--theme-secondary {
+        border: 1px solid var(--color-text);
+        color: var(--color-text);
+        background: var(--color-bg-light);
+        padding: 4px 10px;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    
+        &:not(:disabled):hover,
+        &.btn--is-active {
+            background-color: var(--color-main);
+            border-color: var(--color-main);
+            color: var(--color-bg-light);
+        }
+    }
+
+    &--theme-link {
+        border: none;
+        background: none;
+        padding: 0;
+        color: var(--color-text);
+        transition: color 0.2s;
+    
+        &:not(:disabled):hover {
+            color: var(--color-main);
+        }
+
+        &.btn--is-active {
+            color: var(--color-main);
+            
+            &:hover {
+                color: var(--color-main);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
