@@ -11,15 +11,6 @@
     min-width: 320px;
   }
 
-  &__main {
-    width: 100%;
-    min-width: 320px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    flex: 1 0 auto;
-  }
-
   &__footer {
     position: sticky;
     top: 100vh;
@@ -27,13 +18,3 @@
   }
 }
 
-@media screen and (max-width: 768px) {
-  .page--has-active-nav {
-    overflow-x: hidden;
-    overflow-y: scroll;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-}

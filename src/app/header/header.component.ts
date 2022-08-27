@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Output, EventEmitter,
+  Component, Output, EventEmitter,
 } from '@angular/core';
 
 @Component({
@@ -8,15 +8,10 @@ import {
   styleUrls: ['./header.component.scss'],
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   @Output() toggleMenuEvent = new EventEmitter<boolean>();
 
   isOpenMenu = false;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   toggleMenu(): void {
     this.isOpenMenu = !this.isOpenMenu;

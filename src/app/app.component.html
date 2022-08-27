@@ -1,13 +1,8 @@
-<div class="page"
-[class.page--has-active-nav]="isOpenMenu">
+<div class="page">
     <div class="page__header">
         <app-header (toggleMenuEvent)="openMenu($event)"></app-header>
     </div>
-    <main class="page__main">
-        <div class="wrapper">
-            <h1>RSLang</h1>
-        </div>
-    </main>
+    <app-main></app-main>
     <router-outlet></router-outlet>
     <div class="page__footer">
         <app-footer></app-footer>
