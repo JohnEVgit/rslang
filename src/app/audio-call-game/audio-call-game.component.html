@@ -1,1 +1,36 @@
-<p>audio-call-game works!</p>
+<div class="audio-call" [ngSwitch]="gameStatus">
+  <ng-template ngSwitchCase="menu">
+    <h2>Аудиовызов</h2>
+    <div class="audio-call-menu">
+      <h3>Выберите уровень сложности</h3>
+      <div class="audio-call-menu__levels">
+        <button class="btn levels__btn"
+                *ngFor="let level of levels"
+                (click)="
+                  addClass($event);
+                "
+        >{{ level }}</button>
+      </div>  
+      <button class="btn audio-call-menu__btn" (click)="playGame();">Старт</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="play">
+    <h2 class="audio-call__title">Play</h2>
+    <div class="audio-call-play">
+      <div class="audio-call__controls">
+        <button class="btn audio-call__exit-btn">Начать заново</button>
+        <button class="btn audio-call__next-btn">Следующий</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="end">
+    <h2>Статистика</h2>
+    <div class="audio-call-end">
+      <button class="btn audio-call__exit-btn">Начать заново</button>
+    </div>
+  </ng-template>
+</div>
+
+

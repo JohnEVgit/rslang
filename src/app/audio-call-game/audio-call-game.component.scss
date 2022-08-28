@@ -1,0 +1,50 @@
+.audio-call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 650px;
+  height: 500px;
+}
+
+.btn {
+  background: transparent;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.audio-call-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  .audio-call-menu__btn {
+    margin-top: 20px;
+  }
+
+  .audio-call-menu__levels {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  
+    .levels__btn {
+      padding: 0.3rem;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .active {
+      background: darkkhaki;
+    }
+  }
+  
+}
