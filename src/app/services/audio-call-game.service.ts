@@ -13,7 +13,7 @@ export class AudioCallGameService {
 
   constructor(private http: HttpClient) { }
 
-  getWords(group: number, page?: number | undefined): Observable<Word[]> {
+  public getWords(group: number, page?: number | undefined): Observable<Word[]> {
     if (!page) {
       const randomPage = Math.floor(Math.random() * (this.lastPage - this.firstPage + 1))
        + this.firstPage;

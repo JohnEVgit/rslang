@@ -72,6 +72,11 @@ export class AudioCallGameComponent {
     this.wordQuestion = word[i];
     const options = word[i].responseOptions;
     options?.push(word[i].wordTranslate);
+    this.shuffleArray(options!);
     this.wordQuestion.responseOptions = options;
+  }
+
+  private shuffleArray(array: string[]) {
+    array.sort(() => Math.random() - 0.5);
   }
 }
