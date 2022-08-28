@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Word } from '../data/interfaces';
+import { AudioCallGameService } from '../services/audio-call-game.service';
 
 @Component({
   selector: 'app-audio-call-game',
@@ -14,6 +16,14 @@ export class AudioCallGameComponent {
 
   public isAnswerChosen = false;
 
+  public randomWordsTranslate: string[] = [];
+
+  public isStartDisabled = true;
+
+  public randomWords: Word[] = [];
+
+  constructor(private audioCallGameService: AudioCallGameService) { }
+
   public playGame(): void {
     this.gameStatus = 'play';
     this.isAnswerChosen = false;
@@ -23,5 +33,33 @@ export class AudioCallGameComponent {
     this.prevClass?.classList.remove('active');
     (<HTMLElement>event?.target).classList.add('active');
     this.prevClass = (<HTMLElement>event.target);
+  }
+
+  public chooseLevel(group: number) {
+    this.randomWordsTranslate = this.getRandomWordTranslate();
+    this.audioCallGameService.getWords(group)
+      .subscribe((words) => {
+        this.randomWords = words;
+        words.forEach((_, index) => {
+          const randomAnswers: string[] = [];
+          for (let i = randomAnswers.length; i < 4; i += 1) {
+            const randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+            randomAnswers.push(this.randomWordsTranslate[randomNum]);
+          }
+          this.randomWords[index].responseOptions = randomAnswers;
+        });
+        this.isStartDisabled = false;
+      });
+  }
+
+  private getRandomWordTranslate(): string[] {
+    const randomWordsTranslate: string[] = [];
+    for (let i = 0; i <= 5; i += 1) {
+      this.audioCallGameService.getWords(i)
+        .subscribe((words) => {
+          words.forEach((element) => randomWordsTranslate.push(element.wordTranslate));
+        });
+    }
+    return randomWordsTranslate;
   }
 }

@@ -5,12 +5,13 @@
       <h3>Выберите уровень сложности</h3>
       <div class="audio-call-menu__levels">
         <button class="btn levels__btn"
-                *ngFor="let level of levels"
+                *ngFor="let level of levels; let i = index"
                 (click)="
+                  chooseLevel(i);
                   addClass($event);
                 "
         >{{ level }}</button>
-      </div>  
+      </div>
       <button class="btn audio-call-menu__btn" (click)="playGame();">Старт</button>
     </div>
   </ng-template>
@@ -18,6 +19,11 @@
   <ng-template ngSwitchCase="play">
     <h2 class="audio-call__title">Play</h2>
     <div class="audio-call-play">
+      <div class="audio-call__answers">
+        <button class="btn answer__btn" *ngFor="let word of randomWords[0]?.responseOptions"
+                [disabled] = "isAnswerChosen"
+        >{{ word }}</button>
+      </div>
       <div class="audio-call__controls">
         <button class="btn audio-call__exit-btn">Начать заново</button>
         <button class="btn audio-call__next-btn">Следующий</button>
