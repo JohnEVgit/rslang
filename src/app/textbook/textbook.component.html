@@ -7,7 +7,11 @@
                 <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
                 <div class="textbook__info">
                     <h2 class="textbook__name">{{word.word}}</h2>
-                    <button class="textbook__audio" type="button" aria-label="Проиграть аудио">
+                    <button class="textbook__audio" type="button" aria-label="Проиграть аудио"
+                    (click)="playAudio(word.id)"
+                    [class.textbook__audio--is-active]="isPlayAudio && currentId === word.id"
+                    [disabled]="isPlayAudio"
+                    >
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
                         </svg>
