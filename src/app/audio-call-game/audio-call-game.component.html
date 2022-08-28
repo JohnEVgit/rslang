@@ -19,6 +19,8 @@
   <ng-template ngSwitchCase="play">
     <h2 class="audio-call__title">Play</h2>
     <div class="audio-call-play">
+      <div class="audio-call__sound" (click)="createAudio(wordQuestion?.audio)">
+      </div>
       <div class="audio-call__answers">
         <button class="btn answer__btn" *ngFor="let word of wordQuestion?.responseOptions"
                 [disabled] = "isAnswerChosen"

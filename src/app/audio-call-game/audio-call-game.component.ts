@@ -94,6 +94,15 @@ export class AudioCallGameComponent {
     this.isAnswerChosen = true;
   }
 
+  public createAudio(audioPath: string | undefined): void {
+    if (audioPath) {
+      const audio = new Audio();
+      audio.src = `https://angular-learnwords.herokuapp.com/${audioPath}`;
+      audio.load();
+      audio.play();
+    }
+  }
+
   private getRandomWordTranslate(): string[] {
     const randomWordsTranslate: string[] = [];
     for (let i = 0; i <= 5; i += 1) {
@@ -111,6 +120,7 @@ export class AudioCallGameComponent {
     options?.push(word[i].wordTranslate);
     this.shuffleArray(options!);
     this.wordQuestion.responseOptions = options;
+    this.createAudio(this.wordQuestion?.audio);
   }
 
   private shuffleArray(array: string[]) {
