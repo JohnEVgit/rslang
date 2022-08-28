@@ -22,11 +22,12 @@
       <div class="audio-call__answers">
         <button class="btn answer__btn" *ngFor="let word of wordQuestion?.responseOptions"
                 [disabled] = "isAnswerChosen"
+                (click)="isAnswerChosen = !isAnswerChosen"
         >{{ word }}</button>
       </div>
       <div class="audio-call__controls">
-        <button class="btn audio-call__exit-btn">Начать заново</button>
-        <button class="btn audio-call__next-btn">Следующий</button>
+        <button class="btn audio-call__exit-btn" (click)="menuGame()">Начать заново</button>
+        <button class="btn audio-call__next-btn" [disabled]="!isAnswerChosen" (click)="nextQuestion()">Следующий</button>
       </div>
     </div>
   </ng-template>
@@ -34,7 +35,7 @@
   <ng-template ngSwitchCase="end">
     <h2>Статистика</h2>
     <div class="audio-call-end">
-      <button class="btn audio-call__exit-btn">Начать заново</button>
+      <button class="btn audio-call__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
   </ng-template>
 </div>

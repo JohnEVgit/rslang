@@ -34,6 +34,14 @@ export class AudioCallGameComponent {
     this.generateQuestion(this.randomWords, this.wordsPage);
   }
 
+  public menuGame() {
+    this.gameStatus = 'menu';
+    this.wordsPage = 0;
+    this.wordQuestion = undefined;
+    this.isStartDisabled = true;
+    this.isAnswerChosen = false;
+  }
+
   public addClass(event: MouseEvent) {
     this.prevClass?.classList.remove('active');
     (<HTMLElement>event?.target).classList.add('active');
@@ -55,6 +63,17 @@ export class AudioCallGameComponent {
         });
         this.isStartDisabled = false;
       });
+  }
+
+  public nextQuestion() {
+    this.isAnswerChosen = false;
+    if (this.wordsPage < this.randomWords.length - 1) {
+      this.wordsPage += 1;
+      this.generateQuestion(this.randomWords, this.wordsPage);
+    } else {
+      this.wordsPage = 0;
+      this.gameStatus = 'end';
+    }
   }
 
   private getRandomWordTranslate(): string[] {
