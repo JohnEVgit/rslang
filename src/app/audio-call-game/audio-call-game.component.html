@@ -17,8 +17,11 @@
   </ng-template>
 
   <ng-template ngSwitchCase="play">
-    <h2 class="audio-call__title">Play</h2>
+    <h2 [style.visibility]="isAnswerChosen ? 'visible' : 'hidden'" class="audio-call__title">{{ wordQuestion?.word }}</h2>
     <div class="audio-call-play">
+      <div class="audio-call__img-container">
+        <img class="audio-call__img" *ngIf="isAnswerChosen" [src]="'https://angular-learnwords.herokuapp.com/' + wordQuestion?.image" alt="Word img">
+      </div>
       <div class="audio-call__sound" (click)="createAudio(wordQuestion?.audio)">
       </div>
       <div class="audio-call__answers">
