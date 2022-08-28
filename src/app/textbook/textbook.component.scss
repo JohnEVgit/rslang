@@ -5,18 +5,142 @@
     flex-direction: column;
     box-sizing: border-box;
     flex: 1 0 auto;
-    padding-top: 40px;
+    padding-top: 20px;
     padding-bottom: 40px;
     margin-top: 66px;
 
-    .wrapper {
-        max-width: 1400px;
-    }
-
     &__title {
-        font-size: 32px;
+        font-size: 24px;
         text-align: center;
         margin-top: 0;
+        margin-bottom: 20px;
+    }
+}
+
+.textbook {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    &__elem {
+        display: flex;
+        width: calc(50% - 10px);
+        background-color: var(--color-bg-light);
+        box-shadow: 0 0 5px var(--color-border);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    &__img {
+        object-fit: cover;
+        height: 100%;
+        width: 40%;
+        box-shadow: 0 0 5px var(--color-border);
+    }
+
+    &__info {
+        position: relative;
+        padding: 20px;
+        width: 60%;
+        box-sizing: border-box;
+    }
+
+    &__name {
+        font-size: 28px;
+        margin-top: 0;
         margin-bottom: 0;
+        color: var(--color-main);
+    }
+
+    &__audio {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 0;
+        background: none;
+        border-radius: 5px;
+        border: none;
+        transition: color 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--color-main);
+        }
+    }
+
+    &__svg {
+        display: block;
+    }
+
+    &__under {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 20px
+    }
+
+    &__transcription {
+        color: var(--color-text-accent);
+    }
+
+    &__description {
+        padding-top: 8px;
+        margin-top: 13px;
+        font-size: 13px;
+        border-top: 1px solid var(--color-border);
+        color: var(--color-text-description);
+    }
+
+    &__label {
+        font-size: 12px;
+        margin-top: 0;
+        margin-bottom: -3px;
+        color: var(--color-text-accent);
+    }
+
+    &__meaning {
+        margin-top: 3px;
+        margin-bottom: 0;
+    }
+
+    &__example {
+        margin-top: 3px;
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 1380px) {
+    .textbook__elem {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        margin-top: 48px;
+        
+        &__title {
+            font-size: 22px;
+        }
+    }
+
+    .textbook {
+        &__elem {
+            display: block;
+        }
+
+        &__img {
+            height: auto;
+            max-height: 300px;
+            width: 100%;
+        }
+    
+        &__info {
+            width: 100%;
+        }
     }
 }

@@ -2,5 +2,32 @@
     <div class="wrapper">
         <h1 class="main__title">Электронный учебник</h1>
 
+        <div class="main__textbook textbook">
+            <div class="textbook__elem" *ngFor="let word of words">
+                <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
+                <div class="textbook__info">
+                    <h2 class="textbook__name">{{word.word}}</h2>
+                    <button class="textbook__audio" type="button" aria-label="Проиграть аудио">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
+                        </svg>
+                    </button>
+                    <p class="textbook__under">
+                        <span class="textbook__transcription">{{word.transcription}}</span>
+                        <span class="textbook__translation">{{word.wordTranslate}}</span>
+                    </p>
+                    <div class="textbook__description">
+                        <p class="textbook__label">Значение</p>
+                        <p class="textbook__meaning">{{word.textMeaning}}</p>
+                        <p class="textbook__meaning">{{word.textMeaningTranslate}}</p>
+                    </div>
+                    <div class="textbook__description">
+                        <p class="textbook__label">Пример</p>
+                        <p class="textbook__example">{{word.textExample}}</p>
+                        <p class="textbook__example">{{word.textExampleTranslate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
