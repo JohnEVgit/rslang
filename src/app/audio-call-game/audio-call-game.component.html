@@ -22,7 +22,7 @@
       <div class="audio-call__answers">
         <button class="btn answer__btn" *ngFor="let word of wordQuestion?.responseOptions"
                 [disabled] = "isAnswerChosen"
-                (click)="isAnswerChosen = !isAnswerChosen"
+                (click)="checkMouseAnswer($event, word)"
         >{{ word }}</button>
       </div>
       <div class="audio-call__controls">

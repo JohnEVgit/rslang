@@ -16,6 +16,7 @@
   background: transparent;
   padding: 5px 10px;
   cursor: pointer;
+  opacity: 1;
 }
 
 .audio-call-menu {
@@ -66,6 +67,18 @@
       border-radius: 20px;
       cursor: pointer;
     }
+  }
+
+  .wrong {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+  }
+
+  .right {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
   }
 
   .audio-call__controls {

@@ -67,6 +67,10 @@ export class AudioCallGameComponent {
 
   public nextQuestion() {
     this.isAnswerChosen = false;
+    document.querySelectorAll('.answer__btn').forEach((elem) => {
+      elem.classList.remove('right');
+      elem.classList.remove('wrong');
+    });
     if (this.wordsPage < this.randomWords.length - 1) {
       this.wordsPage += 1;
       this.generateQuestion(this.randomWords, this.wordsPage);
@@ -74,6 +78,20 @@ export class AudioCallGameComponent {
       this.wordsPage = 0;
       this.gameStatus = 'end';
     }
+  }
+
+  public checkMouseAnswer(event: MouseEvent, word: string): void {
+    if (word === this.wordQuestion?.wordTranslate) {
+      (<HTMLElement>event.target).classList.add('right');
+    } else {
+      (<HTMLElement>event.target).classList.add('wrong');
+      document.querySelectorAll('.answer__btn').forEach((elem) => {
+        if (elem.textContent === this.wordQuestion?.wordTranslate) {
+          elem.classList.add('right');
+        }
+      });
+    }
+    this.isAnswerChosen = true;
   }
 
   private getRandomWordTranslate(): string[] {
