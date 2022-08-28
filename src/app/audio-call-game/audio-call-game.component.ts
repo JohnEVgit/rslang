@@ -22,11 +22,16 @@ export class AudioCallGameComponent {
 
   public randomWords: Word[] = [];
 
+  public wordsPage: number = 0;
+
+  public wordQuestion: Word | undefined;
+
   constructor(private audioCallGameService: AudioCallGameService) { }
 
   public playGame(): void {
     this.gameStatus = 'play';
     this.isAnswerChosen = false;
+    this.generateQuestion(this.randomWords, this.wordsPage);
   }
 
   public addClass(event: MouseEvent) {
@@ -61,5 +66,12 @@ export class AudioCallGameComponent {
         });
     }
     return randomWordsTranslate;
+  }
+
+  private generateQuestion(word: Word[], i: number): void {
+    this.wordQuestion = word[i];
+    const options = word[i].responseOptions;
+    options?.push(word[i].wordTranslate);
+    this.wordQuestion.responseOptions = options;
   }
 }

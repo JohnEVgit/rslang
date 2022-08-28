@@ -12,7 +12,7 @@
                 "
         >{{ level }}</button>
       </div>
-      <button class="btn audio-call-menu__btn" (click)="playGame();">Старт</button>
+      <button class="btn audio-call-menu__btn" [disabled] = "isStartDisabled" (click)="playGame();">Старт</button>
     </div>
   </ng-template>
 
@@ -20,7 +20,7 @@
     <h2 class="audio-call__title">Play</h2>
     <div class="audio-call-play">
       <div class="audio-call__answers">
-        <button class="btn answer__btn" *ngFor="let word of randomWords[0]?.responseOptions"
+        <button class="btn answer__btn" *ngFor="let word of wordQuestion?.responseOptions"
                 [disabled] = "isAnswerChosen"
         >{{ word }}</button>
       </div>
