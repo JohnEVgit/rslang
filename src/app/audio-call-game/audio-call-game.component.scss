@@ -25,6 +25,14 @@
   align-items: center;
   gap: 10px;
 
+  .audio-call__rules {
+    font-weight: bold;
+
+    .rules__item {
+      margin: 10px;
+    }
+  }
+
   .audio-call-menu__btn {
     margin-top: 20px;
   }

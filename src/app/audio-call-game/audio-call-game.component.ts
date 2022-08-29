@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import { Word } from '../data/interfaces';
 import { AudioCallGameService } from '../services/audio-call-game.service';
 
@@ -133,7 +133,53 @@ export class AudioCallGameComponent {
     this.createAudio(this.wordQuestion?.audio);
   }
 
-  private shuffleArray(array: string[]) {
+  private shuffleArray(array: string[]): void {
     array.sort(() => Math.random() - 0.5);
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.gameStatus === 'play') {
+      if (!this.isAnswerChosen) {
+        switch (event.key) {
+          case '1': this.checkKeyboardAnswer(this.wordQuestion?.responseOptions?.[0]);
+            break;
+          case '2': this.checkKeyboardAnswer(this.wordQuestion?.responseOptions?.[1]);
+            break;
+          case '3': this.checkKeyboardAnswer(this.wordQuestion?.responseOptions?.[2]);
+            break;
+          case '4': this.checkKeyboardAnswer(this.wordQuestion?.responseOptions?.[3]);
+            break;
+          case '5': this.checkKeyboardAnswer(this.wordQuestion?.responseOptions?.[4]);
+            break;
+          default: break;
+        }
+      } else if (event.code === 'Space') {
+        this.nextQuestion();
+      }
+      switch (event.key) {
+        case 'Escape': this.menuGame();
+          break;
+        case 'Enter': this.createAudio(this.wordQuestion?.audio);
+          break;
+        default: break;
+      }
+    }
+  }
+
+  public checkKeyboardAnswer(word: string | undefined): void {
+    document.querySelectorAll('.answer__btn').forEach((elem) => {
+      if ((elem.textContent === word) && (elem.textContent === this.wordQuestion?.wordTranslate)) {
+        elem.classList.add('right');
+        this.rightAnswers.push(this.wordQuestion);
+      }
+      if ((elem.textContent === word) && (elem.textContent !== this.wordQuestion?.wordTranslate)) {
+        elem.classList.add('wrong');
+        this.wrongAnswers.push(this.wordQuestion!);
+      } else if (elem.textContent === this.wordQuestion?.wordTranslate) {
+        elem.classList.add('right');
+      }
+    });
+    this.isAnswerChosen = true;
   }
 }
