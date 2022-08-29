@@ -62,7 +62,10 @@ export class AudioCallGameComponent {
         words.forEach((_, index) => {
           const randomAnswers: string[] = [];
           for (let i = randomAnswers.length; i < 4; i += 1) {
-            const randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+            let randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+            while (randomAnswers.includes(this.randomWordsTranslate[randomNum])) {
+              randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+            }
             randomAnswers.push(this.randomWordsTranslate[randomNum]);
           }
           this.randomWords[index].responseOptions = randomAnswers;
