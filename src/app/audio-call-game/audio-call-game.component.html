@@ -40,6 +40,28 @@
   <ng-template ngSwitchCase="end">
     <h2>Статистика</h2>
     <div class="audio-call-end">
+      <div class="audio-call__statistics">
+        <ul class="audio-call__right-answers">
+          <h3 class="answers__title">Правильные ответы ({{rightAnswers.length}}):</h3>
+          <li class="right-answers__item" *ngFor="let rightAnswer of rightAnswers">
+            <div class="item__sound" (click)="createAudio(rightAnswer.audio)"></div>
+            <p class="item__word">
+              {{ rightAnswer.word }} -
+              <span class="word-translate">{{ rightAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+        <ul class="audio-call__wrong-answers">
+          <h3 class="answers__title">Неправильные ответы ({{wrongAnswers.length}}):</h3>
+          <li class="wrong-answers__item" *ngFor="let wrongAnswer of wrongAnswers">
+            <div class="item__sound" (click)="createAudio(wrongAnswer.audio)"></div>
+            <p class="item__word">
+              {{ wrongAnswer.word }} -
+              <span class="word-translate">{{ wrongAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+      </div>
       <button class="btn audio-call__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
   </ng-template>

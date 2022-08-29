@@ -26,6 +26,10 @@ export class AudioCallGameComponent {
 
   public wordQuestion: Word | undefined;
 
+  public rightAnswers: Word[] = [];
+
+  public wrongAnswers: Word[] = [];
+
   constructor(private audioCallGameService: AudioCallGameService) { }
 
   public playGame(): void {
@@ -40,6 +44,8 @@ export class AudioCallGameComponent {
     this.wordQuestion = undefined;
     this.isStartDisabled = true;
     this.isAnswerChosen = false;
+    this.rightAnswers = [];
+    this.wrongAnswers = [];
   }
 
   public addClass(event: MouseEvent) {
@@ -83,8 +89,12 @@ export class AudioCallGameComponent {
   public checkMouseAnswer(event: MouseEvent, word: string): void {
     if (word === this.wordQuestion?.wordTranslate) {
       (<HTMLElement>event.target).classList.add('right');
+      this.rightAnswers.push(this.wordQuestion);
     } else {
       (<HTMLElement>event.target).classList.add('wrong');
+      if (this.wordQuestion) {
+        this.wrongAnswers.push(this.wordQuestion);
+      }
       document.querySelectorAll('.answer__btn').forEach((elem) => {
         if (elem.textContent === this.wordQuestion?.wordTranslate) {
           elem.classList.add('right');
