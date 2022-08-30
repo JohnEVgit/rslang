@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthModalService } from './services/auth-modal.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  constructor(public authModalService: AuthModalService) {
+
+  }
+
   title = 'rslang';
 }
