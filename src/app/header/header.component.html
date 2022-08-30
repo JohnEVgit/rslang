@@ -1,6 +1,6 @@
 <header class="header">
     <div class="header__inner wrapper">
-        <button class="header__toggle toggle-nav js-toggle-nav" type="button" 
+        <button class="header__toggle toggle-nav js-toggle-nav" type="button"
             title="Toggle menu" aria-label="Toggle menu"
             (click)="toggleMenu()"
             [class.toggle-nav--is-active]="isOpenMenu">
@@ -12,13 +12,13 @@
             <div class="nav__shadow" (click)="closeMenu()"></div>
             <ul class="nav__list">
                 <li class="nav__item">
-                    <a class="nav__link" href="#" (click)="closeMenu()">Главная</a>
+                    <a class="nav__link" routerLink="/"(click)="closeMenu()">Главная</a>
                 </li>
                 <li class="nav__item">
                     <a class="nav__link" href="#" (click)="closeMenu()">Учебник</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" href="#" (click)="closeMenu()">Аудиовызов</a>
+                    <a class="nav__link" routerLink="/audio-call-game" (click)="closeMenu()">Аудиовызов</a>
                 </li>
                 <li class="nav__item">
                     <a class="nav__link" href="#" (click)="closeMenu()">Спринт</a>
