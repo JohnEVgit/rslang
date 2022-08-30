@@ -1,6 +1,7 @@
 import {
   Component, Output, EventEmitter,
 } from '@angular/core';
+import { AuthModalService } from '../services/auth-modal.service';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,10 @@ import {
 
 export class HeaderComponent {
   @Output() toggleMenuEvent = new EventEmitter<boolean>();
+
+  constructor(public authModalService: AuthModalService) {
+
+  }
 
   isOpenMenu = false;
 
