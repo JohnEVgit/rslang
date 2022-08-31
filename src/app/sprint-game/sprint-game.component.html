@@ -1,0 +1,60 @@
+<div class="sprint" [ngSwitch]="gameStatus">
+  <ng-template ngSwitchCase="menu">
+    <h2>Спринт</h2>
+    <div class="sprint-menu">
+      <ol class="sprint__rules">
+        <h3>Правила:</h3>
+        <li class="rules__item">Используйте мышь для выбора</li>
+        <li class="rules__item">Используйте клавиши влево и вправо</li>
+      </ol>
+      <h3>Выберите уровень сложности</h3>
+      <div class="sprint-menu__levels">
+        <button class="btn levels__btn"
+                *ngFor="let level of levels; let i = index"
+                (click)="
+                  chooseLevel(i);
+                  addClass($event);
+                "
+        >{{ level }}</button>
+      </div>
+      <button class="btn sprint-menu__btn" [disabled] = "isStartDisabled" (click)="playGame();">Старт</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="play">
+    <div class="sprint-play">
+      <div class="sprint__answers">
+      </div>
+      <button class="btn sprint__exit-btn">Начать заново</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="end">
+    <h2>Статистика</h2>
+    <div class="sprint-end">
+      <div class="sprint-end__statistics">
+        <ul class="sprint__right-answers">
+          <h3 class="answers__title">Правильные ответы ():</h3>
+          <li class="right-answers__item">
+            <div class="item__sound"></div>
+            <p class="item__word">
+              <span class="word-translate"></span>
+            </p>
+          </li>
+        </ul>
+        <ul class="sprint__wrong-answers">
+          <h3 class="answers__title">Неправильные ответы ():</h3>
+          <li class="wrong-answers__item">
+            <div class="item__sound"></div>
+            <p class="item__word">
+              <span class="word-translate"></span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <button class="btn sprint__exit-btn">Начать заново</button>
+    </div>
+  </ng-template>
+</div>
+
+

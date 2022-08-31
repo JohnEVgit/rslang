@@ -10,6 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { MainComponent } from './main/main.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { AudioCallGameComponent } from './audio-call-game/audio-call-game.component';
+import { SprintGameComponent } from './sprint-game/sprint-game.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { AudioCallGameComponent } from './audio-call-game/audio-call-game.compon
     MainComponent,
     AuthComponent,
     AudioCallGameComponent,
+    SprintGameComponent,
   ],
   imports: [
     BrowserModule,
