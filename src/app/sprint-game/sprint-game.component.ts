@@ -88,14 +88,23 @@ export class SprintGameComponent {
   }
 
   public checkMouseAnswer(isRight: boolean) {
-    if (isRight && this.randomWords[this.wordIndex].wordTranslate === this.wordTranslate) {
-      console.log(true);
-    } else if (!isRight && this.randomWords[this.wordIndex].wordTranslate !== this.wordTranslate) {
-      console.log(true);
+    if ((isRight && this.randomWords[this.wordIndex].wordTranslate === this.wordTranslate)
+       || (!isRight && this.randomWords[this.wordIndex].wordTranslate !== this.wordTranslate)) {
+      this.createAudio('../../assets/audio/answer-right.mp3');
     } else {
-      console.log(false);
+      this.createAudio('../../assets/audio/answer-wrong.mp3');
     }
     this.wordIndex += 1;
     this.nextQuestion();
+  }
+
+  private createAudio(audioPath: string | undefined): void {
+    if (audioPath) {
+      const audio = new Audio();
+      audio.src = audioPath;
+      audio.volume = 0.2;
+      audio.load();
+      audio.play();
+    }
   }
 }
