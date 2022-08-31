@@ -23,10 +23,19 @@
 
   <ng-template ngSwitchCase="play">
     <div class="sprint-play">
+      <div class="sprint-play__seconds">
+        <span class="seconds">Осталось {{ time }}</span> сек.
+      </div>
       <div class="sprint__answers">
+        <p>{{ word }}</p>
+        <p>{{ wordTranslate }}</p>
+      </div>
+      <div class="sprint__controls">
+        <button class="btn sprint__right-btn" (click)="checkMouseAnswer(true)">Верно</button>
+        <button class="btn sprint__wrong-btn" (click)="checkMouseAnswer(false)">Неверно</button>
       </div>
       <button (click)="nextQuestion()">Next</button>
-      <button class="btn sprint__exit-btn" (click)="gameStatus = 'menu'">Начать заново</button>
+      <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
   </ng-template>
 
@@ -53,9 +62,10 @@
           </li>
         </ul>
       </div>
-      <button class="btn sprint__exit-btn">Начать заново</button>
+      <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
   </ng-template>
 </div>
+
 
 
