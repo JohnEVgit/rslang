@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
     ]),
     password: new FormControl<string>('', [
       Validators.required,
-      Validators.minLength(6),
+      Validators.minLength(8),
     ]),
   });
 
@@ -36,13 +36,13 @@ export class AuthComponent implements OnInit {
       Validators.required,
       Validators.minLength(3),
     ]),
-    emailS: new FormControl<string>('', [
+    email: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(6),
     ]),
-    passwordS: new FormControl<string>('', [
+    password: new FormControl<string>('', [
       Validators.required,
-      Validators.minLength(6),
+      Validators.minLength(8),
     ]),
   });
 
@@ -51,11 +51,11 @@ export class AuthComponent implements OnInit {
   }
 
   get emailS() {
-    return this.signup.controls.emailS as FormControl;
+    return this.signup.controls.email as FormControl;
   }
 
   get passwordS() {
-    return this.signup.controls.passwordS as FormControl;
+    return this.signup.controls.password as FormControl;
   }
 
   constructor(public authModalService: AuthModalService) { }
@@ -65,9 +65,39 @@ export class AuthComponent implements OnInit {
 
   submit() {
     console.log(this.form.value);
+    const loginUser = async (user:{}) => {
+      const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/signin', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+      const content = await rawResponse.json();
+
+      console.log(content);
+    };
+
+    loginUser(this.form.value);
   }
 
   submitS() {
     console.log(this.signup.value);
+    const createUser = async (user: {}) => {
+      const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/users', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+      const content = await rawResponse.json();
+
+      console.log(content);
+    };
+
+    createUser(this.signup.value);
   }
 }

@@ -1,16 +1,6 @@
 <div class="shadow" (click)="authModalService.close()"></div>
 
 <div class="container" id="container">
-	<div class="form-container sign-up-container">
-		<!-- <form action="#" [formGroup]="form" (ngSubmit)='submit()'>
-			<h1>Create Account</h1>
-			<span>or use your email for registration</span>
-			<input type="text" placeholder="Name" />
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<button type="submit">Sign Up</button>
-		</form> -->
-	</div>
 	<div class="form-container sign-in-container">
 		<form class="left" action="#" action="#" [formGroup]="form" (ngSubmit)='submit()'>
 			<h1>Sign in</h1>
@@ -20,25 +10,19 @@
 			<input type="password" placeholder="Password" formControlName="password" />
             <span class="alert" *ngIf="password.errors?.['minlength'] && password.touched ">Too short password. Now {{ password.value.length }}</span>
 			<button type="submit" [disabled]="form.invalid" >Sign In</button>
-        
 		</form>
 	</div>
 	<div class="overlay-container">
 		<div class="overlay">
-			<!-- <div class="overlay-panel overlay-left">
-				<h1>Welcome Back!</h1>
-				<p>To keep connected with us please login with your personal info</p>
-				<button class="ghost" id="signIn">Sign In</button>
-			</div> -->
 			<form action="#" class="overlay-panel overlay-right right" [formGroup]="signup" (ngSubmit)='submitS()'>
 				<h1>Hello, Friend!</h1>
 				<p>Enter your personal details and start journey with us</p>
                 <input type="text" placeholder="Name" formControlName="name"/>
                 <span class="alert-signup" *ngIf="name.errors?.['minlength'] && name.touched ">Too short name. Now {{ name.value.length }}</span>
-			    <input type="email" placeholder="Email" formControlName="emailS"/>
-                <span class="alert-signup" *ngIf="emailS.errors?.['minlength'] && emailS.touched ">Too short email. Now {{ emailS.value.length }}</span>
-			    <input type="password" placeholder="Password" formControlName="passwordS"/>
-                <span class="alert-signup" *ngIf="passwordS.errors?.['minlength'] && passwordS.touched ">Too short password. Now {{ passwordS.value.length }}</span>
+			    <input type="email" placeholder="Email" formControlName="email"/>
+                <span class="alert-signup" *ngIf="email.errors?.['minlength'] && email.touched ">Too short email. Now {{ email.value.length }}</span>
+			    <input type="password" placeholder="Password" formControlName="password"/>
+                <span class="alert-signup" *ngIf="password.errors?.['minlength'] && password.touched ">Too short password. Now {{ password.value.length }}</span>
 				<button type="submit" class="ghost" id="signUp" [disabled]="signup.invalid">Sign Up</button>
 			</form>
 		</div>
