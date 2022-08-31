@@ -1,22 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-export interface Word {
-  'id': 'string',
-  'group': 0,
-  'page': 0,
-  'word': 'string',
-  'image': 'string',
-  'audio': 'string',
-  'audioMeaning': 'string',
-  'audioExample': 'string',
-  'textMeaning': 'string',
-  'textExample': 'string',
-  'transcription': 'string',
-  'wordTranslate': 'string',
-  'textMeaningTranslate': 'string',
-  'textExampleTranslate': 'string'
-}
+import { Word } from '../data/interfaces';
 
 @Component({
   selector: 'app-textbook',
@@ -32,13 +16,38 @@ export class TextbookComponent implements OnInit {
 
   currentId = '';
 
+  group: number = Number(localStorage.getItem('group')) || 1;
+
+  groupArr: number[] = [1,2,3,4,5,6];
+
+  page: number = Number(localStorage.getItem('page')) || 1;
+
+  total: number = 600;
+
+  loading: boolean = false;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get<Word[]>(`${this.backendUrl}words`).subscribe((response) => {
+    this.getPage(this.page);
+  }
+
+  getPage(page: number): void {
+    this.loading = true;
+
+    this.http.get<Word[]>(`${this.backendUrl}words?group=${this.group - 1}&page=${page - 1}`).subscribe((response) => {
       console.log('Response', response);
       this.words = response;
+      this.page = page;
+      this.loading = false;
     });
+  }
+
+  changeGroup(event: Event): void {
+    const thisTarget = event.target as HTMLButtonElement;
+    this.group = Number(thisTarget.textContent);
+    localStorage.setItem('group', String(this.group));
+    this.getPage(1);
   }
 
   playAudio(id: string): void {

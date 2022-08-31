@@ -3,7 +3,6 @@
         <app-header></app-header>
     </div>
     <app-auth *ngIf="authModalService.isVisible$ | async"></app-auth>
-    <app-main></app-main>
     <router-outlet></router-outlet>
     <div class="page__footer">
         <app-footer></app-footer>

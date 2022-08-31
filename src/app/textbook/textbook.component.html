@@ -1,9 +1,20 @@
-<main class="main">
+<main class="main main--group{{group}}">
     <div class="wrapper">
         <h1 class="main__title">Электронный учебник</h1>
 
+        <div class="main__group group">
+            <p class="group__title">Выберите раздел:</p>
+            <ul class="group__list">
+                <li class="group__item" *ngFor="let n of groupArr">
+                    <button class="group__btn group__btn--group{{n}}" type="button"
+                    [ngClass]="{ 'group__btn--is-active': (n === group) }"
+                    (click)="changeGroup($event)">{{n}}</button>
+                </li>
+            </ul>
+        </div>
+
         <div class="main__textbook textbook">
-            <div class="textbook__elem" *ngFor="let word of words">
+            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: 20, currentPage: page, totalItems: total }">
                 <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
                 <div class="textbook__info">
                     <h2 class="textbook__name">{{word.word}}</h2>
@@ -32,6 +43,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="pagination" [ngClass]="{ 'hidden': loading }">
+            <pagination-controls (pageChange)="getPage($event)" id="server"
+            [previousLabel]="'Предыдущая'"
+            [nextLabel]="'Следующая'"
+            [screenReaderPaginationLabel]="'Пагинация'"
+            [screenReaderPageLabel]="'Страница'"
+            [screenReaderCurrentLabel]="'Вы на странице'"></pagination-controls>
         </div>
     </div>
 </main>

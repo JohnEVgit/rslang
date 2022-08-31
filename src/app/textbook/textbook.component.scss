@@ -8,12 +8,129 @@
     padding-top: 20px;
     padding-bottom: 40px;
     margin-top: 66px;
+    min-height: calc(100vh - 131px);
+    transition: background-color 0.2s;
 
     &__title {
         font-size: 24px;
         text-align: center;
         margin-top: 0;
         margin-bottom: 20px;
+    }
+
+    &__group {
+        margin-bottom: 20px;
+    }
+
+    &--group1 {
+        background-color: var(--color-group-1);
+    }
+    
+    &--group2 {
+        background-color: var(--color-group-2);
+    }
+    
+    &--group3 {
+        background-color: var(--color-group-3);
+    }
+    
+    &--group4 {
+        background-color: var(--color-group-4);
+    }
+    
+    &--group5 {
+        background-color: var(--color-group-5);
+    }
+    
+    &--group6 {
+        background-color: var(--color-group-6);
+    }
+}
+
+.group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+
+    &__title {
+        margin: 0;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__btn {
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 38px;
+        width: 38px;
+        border: none;
+        background-color: var(--color-bg-light);
+        box-shadow: 0 0 5px var(--color-shadow);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+        cursor: pointer;
+        font-weight: bold;
+        border: 2px solid var(--color-text);
+        color: var(--color-text);
+
+        &--is-active {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23252525' viewBox='0 0 24 24'%3E%3Cpath d='m5 10.41-1.3 1.3a1 1 0 1 1-1.4-1.42l2-2a1 1 0 0 1 1.4 0l3.44 3.44 10.32-6.57a1 1 0 0 1 1.25.13l1 1a1 1 0 0 1-.03 1.45l-12 11a1 1 0 0 1-1.44-.09l-3.31-3.87a1 1 0 0 1 1.51-1.3l2.65 3.08 8.68-7.96-8.23 5.24a1 1 0 0 1-1.25-.13L5 10.4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: 30px 30px;
+            background-position: center;
+            font-size: 0;
+
+            &:hover {
+                box-shadow: none;
+            }
+        }
+
+        &:focus-visible,
+        &:hover {
+            box-shadow: 0 0 10px var(--color-shadow-dark);
+        }
+
+        &--group1 {
+            background-color: var(--color-group-1);
+        }
+        
+        &--group2 {
+            background-color: var(--color-group-2);
+        }
+        
+        &--group3 {
+            background-color: var(--color-group-3);
+        }
+        
+        &--group4 {
+            background-color: var(--color-group-4);
+        }
+        
+        &--group5 {
+            background-color: var(--color-group-5);
+        }
+        
+        &--group6 {
+            background-color: var(--color-group-6);
+        }
     }
 }
 
@@ -154,6 +271,130 @@
     }
 }
 
+.spinner {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: var(--color-main);
+    }
+
+    &::after {
+        animation: spinner infinite 1s;
+    }
+}
+
+@keyframes spinner {
+    0% {
+        width: 80px;
+        height: 80px;
+        opacity: 1;
+    }
+
+    100% {
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+    }
+}
+
+:host ::ng-deep .ngx-pagination {
+    margin: 40px 0 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    &::before,
+    &::after {
+        display: none;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        
+        &.small-screen {
+            display: none;
+        }
+
+        &.current {
+            background: none;
+            padding: 0;
+
+            span {
+                background: var(--color-main);
+                color: var(--color-bg-light);
+                border-color: var(--color-main);
+            }
+        }
+
+        &.disabled,
+        > a,
+        > span {
+            min-width: 26px;
+            height: 26px;
+            box-sizing: border-box;
+            text-align: center;
+            background: var(--color-bg-light);
+            color: var(--color-text);
+            padding: 0 6px;
+            line-height: 26px;
+            border-radius: 5px;
+            border: 1px solid var(--color-text);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+            &:hover {
+                background: var(--color-main);
+                color: var(--color-bg-light);
+                border-color: var(--color-main);
+            }
+        }
+
+        &.disabled {
+            opacity: 0.5;
+
+            > span {
+                padding: 0;
+                border: none;
+                background: none;
+                min-width: 0;
+
+                &:hover {
+                    padding: 0;
+                    border: none;
+                    background: none;
+                    color: var(--color-text);
+                }
+            }
+
+            &:hover {
+                background: var(--color-bg-light);
+                color: var(--color-text);
+                padding: 0 6px;
+                border: 1px solid var(--color-text);
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1380px) {
     .textbook__elem {
         width: 100%;
@@ -165,6 +406,7 @@
         padding-top: 24px;
         padding-bottom: 24px;
         margin-top: 48px;
+        min-height: calc(100vh - 97px);
         
         &__title {
             font-size: 22px;
@@ -185,5 +427,35 @@
         &__info {
             width: 100%;
         }
+    }
+
+
+    :host ::ng-deep .ngx-pagination {
+        li {
+            &.pagination-previous,
+            &.pagination-next {
+                font-size: 0;
+    
+                a::before,
+                a::after,
+                &::before,
+                &::after {
+                    margin: auto;
+                    font-size: 16px;
+                    line-height: 22px;
+                    padding-bottom: 2px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main {
+        min-height: calc(100vh - 131px);
+    }
+
+    :host ::ng-deep .ngx-pagination {
+        gap: 7px;
     }
 }
