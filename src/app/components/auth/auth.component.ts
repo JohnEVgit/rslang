@@ -79,7 +79,7 @@ export class AuthComponent implements OnInit {
       console.log(content);
     };
 
-    loginUser(this.form.value);
+    loginUser(this.form.value).then(() => this.authModalService.close());
   }
 
   submitS() {
@@ -96,8 +96,9 @@ export class AuthComponent implements OnInit {
       const content = await rawResponse.json();
 
       console.log(content);
+      localStorage.setItem('JWT', content);
     };
 
-    createUser(this.signup.value);
+    createUser(this.signup.value).then(() => this.authModalService.close());
   }
 }
