@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { SprintGameService } from '../services/sprint-game.service';
+import { Word } from '../data/interfaces';
 
 @Component({
   selector: 'app-sprint-game',
@@ -14,8 +16,45 @@ export class SprintGameComponent {
 
   public isStartDisabled = true;
 
-  public chooseLevel(group: number):void {
-    this.isStartDisabled = false;
+  public randomWords: Word[] = [];
+
+  private wordIndex = 0;
+
+  private wordTranslateIndex = 0;
+
+  public word = '';
+
+  public wordTranslate = '';
+
+  constructor(private sprintGameService: SprintGameService) {}
+
+  public chooseLevel(group: number) {
+    this.sprintGameService.getWords(group)
+      .subscribe((words) => {
+        words.forEach((word, index) => {
+          this.randomWords.push(word);
+        });
+        this.getWord();
+        this.isStartDisabled = false;
+      });
+    console.log(this.randomWords);
+  }
+
+  private getWord(): void {
+    this.word = this.randomWords[this.wordIndex].word;
+    this.wordTranslate = this.randomWords[this.getRandomTranslateIndex()].wordTranslate;
+  }
+
+  private getRandomTranslateIndex(): number {
+    if (Math.random() >= 0.5) {
+      this.wordTranslateIndex = this.wordIndex;
+    } else {
+      this.wordTranslateIndex = Math.floor(Math.random() * (this.randomWords.length - 1));
+      while (this.wordIndex === this.wordTranslateIndex) {
+        this.wordTranslateIndex = Math.floor(Math.random() * (this.randomWords.length - 1));
+      }
+    }
+    return this.wordTranslateIndex;
   }
 
   public addClass(event: MouseEvent) {
@@ -26,5 +65,13 @@ export class SprintGameComponent {
 
   public playGame(): void {
     this.gameStatus = 'play';
+  }
+
+  public nextQuestion(): void {
+    this.getWord();
+    this.wordIndex += 1;
+    console.log(this.word);
+    console.log(this.wordTranslate);
+    console.log(this.wordIndex)
   }
 }

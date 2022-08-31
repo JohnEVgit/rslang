@@ -25,7 +25,8 @@
     <div class="sprint-play">
       <div class="sprint__answers">
       </div>
-      <button class="btn sprint__exit-btn">Начать заново</button>
+      <button (click)="nextQuestion()">Next</button>
+      <button class="btn sprint__exit-btn" (click)="gameStatus = 'menu'">Начать заново</button>
     </div>
   </ng-template>
 
