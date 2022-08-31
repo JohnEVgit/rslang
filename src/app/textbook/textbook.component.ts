@@ -34,6 +34,7 @@ export class TextbookComponent implements OnInit {
 
   getPage(page: number): void {
     this.loading = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     this.http.get<Word[]>(`${this.backendUrl}words?group=${this.group - 1}&page=${page - 1}`).subscribe((response) => {
       console.log('Response', response);
