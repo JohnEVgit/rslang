@@ -56,22 +56,24 @@
   <ng-template ngSwitchCase="end">
     <h2>Статистика</h2>
     <div class="sprint-end">
-      <div class="sprint-end__statistics">
+      <div class="sprint__statistics">
         <ul class="sprint__right-answers">
-          <h3 class="answers__title">Правильные ответы ():</h3>
-          <li class="right-answers__item">
-            <div class="item__sound"></div>
+          <h3 class="answers__title">Правильные ответы ({{rightAnswers.length}}):</h3>
+          <li class="right-answers__item" *ngFor="let rightAnswer of rightAnswers">
+            <div class="item__sound" (click)="createAudio(rightAnswer.audio, true)"></div>
             <p class="item__word">
-              <span class="word-translate"></span>
+              {{ rightAnswer.word }} -
+              <span class="word-translate">{{ rightAnswer.wordTranslate }}</span>
             </p>
           </li>
         </ul>
         <ul class="sprint__wrong-answers">
-          <h3 class="answers__title">Неправильные ответы ():</h3>
-          <li class="wrong-answers__item">
-            <div class="item__sound"></div>
+          <h3 class="answers__title">Неправильные ответы ({{wrongAnswers.length}}):</h3>
+          <li class="wrong-answers__item" *ngFor="let wrongAnswer of wrongAnswers">
+            <div class="item__sound" (click)="createAudio(wrongAnswer.audio, true)"></div>
             <p class="item__word">
-              <span class="word-translate"></span>
+              {{ wrongAnswer.word }} -
+              <span class="word-translate">{{ wrongAnswer.wordTranslate }}</span>
             </p>
           </li>
         </ul>

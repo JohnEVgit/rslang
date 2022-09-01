@@ -1,5 +1,5 @@
-import {Component, HostListener} from '@angular/core';
-import {Observable, Subject, takeUntil, timer} from 'rxjs';
+import { Component, HostListener } from '@angular/core';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
 
@@ -36,6 +36,10 @@ export class SprintGameComponent {
   public score = 0;
 
   public scorePoints = 10;
+
+  public rightAnswers: Word[] = [];
+
+  public wrongAnswers: Word[] = [];
 
   constructor(private sprintGameService: SprintGameService) {}
 
@@ -79,7 +83,7 @@ export class SprintGameComponent {
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
       if (this.time === 0) {
-        this.gameStatus = 'end';
+       // this.gameStatus = 'end';
       }
     });
   }
@@ -100,14 +104,18 @@ export class SprintGameComponent {
     this.currentStreak = 0;
     this.score = 0;
     this.scorePoints = 10;
+    this.rightAnswers = [];
+    this.wrongAnswers = [];
   }
 
   public checkAnswer(isRight: boolean) {
-    if ((isRight && this.randomWords[this.wordIndex].wordTranslate === this.wordTranslate)
-       || (!isRight && this.randomWords[this.wordIndex].wordTranslate !== this.wordTranslate)) {
+    const word: Word = this.randomWords[this.wordIndex];
+    if ((isRight && word.wordTranslate === this.wordTranslate)
+       || (!isRight && word.wordTranslate !== this.wordTranslate)) {
       this.createAudio('../../assets/audio/answer-right.mp3');
       this.currentStreak += 1;
       this.score += this.scorePoints;
+      this.rightAnswers.push(word);
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
         if (this.scorePoints < 80) {
@@ -118,16 +126,21 @@ export class SprintGameComponent {
       this.createAudio('../../assets/audio/answer-wrong.mp3');
       this.currentStreak = 0;
       this.scorePoints = 10;
+      this.wrongAnswers.push(word);
     }
     this.wordIndex += 1;
     this.nextQuestion();
   }
 
-  private createAudio(audioPath: string | undefined): void {
+  public createAudio(audioPath: string | undefined, isWordAudio?: boolean): void {
     if (audioPath) {
       const audio = new Audio();
-      audio.src = audioPath;
-      audio.volume = 0.2;
+      if (isWordAudio) {
+        audio.src = `https://angular-learnwords.herokuapp.com/${audioPath}`;
+      } else {
+        audio.src = audioPath;
+        audio.volume = 0.2;
+      }
       audio.load();
       audio.play();
     }
