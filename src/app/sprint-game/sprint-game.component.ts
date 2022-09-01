@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import {Component, HostListener, OnDestroy} from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
@@ -8,7 +8,7 @@ import { Word } from '../data/interfaces';
   templateUrl: './sprint-game.component.html',
   styleUrls: ['./sprint-game.component.scss'],
 })
-export class SprintGameComponent {
+export class SprintGameComponent implements OnDestroy {
   public levels: string[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
   public gameStatus = 'menu';
@@ -22,6 +22,8 @@ export class SprintGameComponent {
   private wordIndex = 0;
 
   private wordTranslateIndex = 0;
+
+  private group = 0;
 
   public word = '';
 
@@ -43,10 +45,22 @@ export class SprintGameComponent {
 
   constructor(private sprintGameService: SprintGameService) {}
 
+  ngOnDestroy(): void {
+    this.menuGame();
+  }
+
   public chooseLevel(group: number) {
+    this.group = group;
+    this.sprintGameService.pagesArray = [];
+    this.getWords(this.group);
+  }
+
+  private getWords(group: number) {
+    this.randomWords = [];
+    this.wordIndex = 0;
     this.sprintGameService.getWords(group)
       .subscribe((words) => {
-        words.forEach((word, index) => {
+        words.forEach((word) => {
           this.randomWords.push(word);
         });
         this.generateQuestion();
@@ -83,7 +97,7 @@ export class SprintGameComponent {
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
       if (this.time === 0) {
-       // this.gameStatus = 'end';
+        this.gameStatus = 'end';
       }
     });
   }
@@ -92,12 +106,13 @@ export class SprintGameComponent {
     if (this.wordIndex !== this.randomWords.length) {
       this.generateQuestion();
     } else {
-      this.gameStatus = 'end';
+      this.getWords(this.group);
     }
   }
 
   public menuGame(): void {
     this.gameStatus = 'menu';
+    this.isStartDisabled = true;
     this.randomWords = [];
     this.wordIndex = 0;
     this.timer.next(0);
@@ -106,6 +121,7 @@ export class SprintGameComponent {
     this.scorePoints = 10;
     this.rightAnswers = [];
     this.wrongAnswers = [];
+    this.sprintGameService.pagesArray = [];
   }
 
   public checkAnswer(isRight: boolean) {
