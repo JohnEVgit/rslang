@@ -18,7 +18,7 @@ export class TextbookComponent implements OnInit {
 
   group: number = Number(localStorage.getItem('group')) || 1;
 
-  groupArr: number[] = [1,2,3,4,5,6];
+  groupArr: number[] = [1, 2, 3, 4, 5, 6];
 
   page: number = Number(localStorage.getItem('page')) || 1;
 

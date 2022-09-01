@@ -14,9 +14,11 @@
         </div>
 
         <div class="main__textbook textbook">
-            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: 20, currentPage: page, totalItems: total }">
+            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: 20, currentPage: page, totalItems: total }; index as i">
                 <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
-                <div class="textbook__info">
+                <div class="textbook__info"
+                [class.textbook__info--is-learned]="i === 0"
+                [class.textbook__info--is-difficult]="i === 1">
                     <h2 class="textbook__name">{{word.word}}</h2>
                     <button class="textbook__audio" type="button" aria-label="Проиграть аудио"
                     (click)="playAudio(word.id)"
@@ -25,6 +27,18 @@
                     >
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
+                        </svg>
+                    </button>
+                    <button class="textbook__difficult" type="button"
+                    [class.textbook__difficult--is-active]="i === 1">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
+                        </svg>
+                    </button>
+                    <button class="textbook__learned" type="button"
+                    [class.textbook__learned--is-active]="i === 0">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-check"></use>
                         </svg>
                     </button>
                     <p class="textbook__under">

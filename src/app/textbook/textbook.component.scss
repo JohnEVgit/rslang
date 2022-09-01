@@ -165,29 +165,43 @@
         padding: 20px;
         width: 60%;
         box-sizing: border-box;
+        transition: box-shadow 0.2s;
+
+        &--is-learned {
+            box-shadow: inset 0 0 25px 5px #98f398;
+        }
+
+        &--is-difficult {
+            box-shadow: inset 0 0 25px 5px #f9a3a3;
+        }
     }
 
     &__name {
         font-size: 28px;
         margin-top: 0;
-        margin-bottom: 0;
+        margin-bottom: 5px;
         color: var(--color-main);
+        margin-right: 30px;
     }
 
     &__audio {
         position: absolute;
-        top: 20px;
+        top: 15px;
         right: 20px;
         padding: 0;
         background: none;
         border-radius: 5px;
         border: none;
-        transition: color 0.2s;
+        transition: filter 0.2s;
         cursor: pointer;
         color: var(--color-text);
 
         &:hover:not(:disabled) {
-            color: var(--color-main);
+            filter: drop-shadow(0 0 5px var(--color-shadow-icon));
+        }
+
+        &:disabled {
+            cursor: default;
         }
 
         &--is-active {
@@ -218,13 +232,58 @@
         z-index: 1;
     }
 
+    &__difficult {
+        position: absolute;
+        top: 45px;
+        right: 20px;
+        padding: 0;
+        background: none;
+        border-radius: 5px;
+        border: none;
+        transition: color 0.2s, filter 0.2s;
+        cursor: pointer;
+        color: var(--color-bg-light);
+
+        &:hover {
+            filter: drop-shadow(0 0 5px var(--color-shadow-icon));
+        }
+
+        &--is-active {
+            color: red;
+        }
+    }
+
+    &__learned {
+        position: absolute;
+        top: 75px;
+        right: 20px;
+        padding: 0;
+        background: none;
+        border-radius: 5px;
+        border: none;
+        transition: filter 0.2s, fill 0.2s;
+        cursor: pointer;
+        color: var(--color-text);
+        fill: var(--color-bg-light);
+
+        &:hover {
+            filter: drop-shadow(0 0 5px var(--color-shadow-icon));
+        }
+
+        &--is-active {
+            fill: #26ff26;
+        }
+    }
+    
     &__under {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
         margin-top: 0;
         margin-bottom: 0;
-        font-size: 20px
+        font-size: 20px;
+        margin-right: 30px;
+        padding-bottom: 10px;
     }
 
     &__transcription {
@@ -314,12 +373,15 @@
 }
 
 :host ::ng-deep .ngx-pagination {
-    margin: 40px 0 20px;
-    padding: 0;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 8px;
+    background: #fff;
+    padding: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 5px var(--color-shadow);
 
     &::before,
     &::after {
@@ -459,3 +521,11 @@
         gap: 7px;
     }
 }
+
+
+@media screen and (max-width: 359px) {
+    :host ::ng-deep .ngx-pagination {
+        gap: 3px;
+    }
+}
+
