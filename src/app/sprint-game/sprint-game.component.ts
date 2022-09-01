@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {Observable, Subject, takeUntil, timer} from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
@@ -102,7 +102,7 @@ export class SprintGameComponent {
     this.scorePoints = 10;
   }
 
-  public checkMouseAnswer(isRight: boolean) {
+  public checkAnswer(isRight: boolean) {
     if ((isRight && this.randomWords[this.wordIndex].wordTranslate === this.wordTranslate)
        || (!isRight && this.randomWords[this.wordIndex].wordTranslate !== this.wordTranslate)) {
       this.createAudio('../../assets/audio/answer-right.mp3');
@@ -130,6 +130,21 @@ export class SprintGameComponent {
       audio.volume = 0.2;
       audio.load();
       audio.play();
+    }
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.gameStatus === 'play') {
+      if (event.key === 'ArrowRight') {
+        this.checkAnswer(true);
+      }
+      if (event.key === 'ArrowLeft') {
+        this.checkAnswer(false);
+      }
+      if (event.key === 'Escape') {
+        this.menuGame();
+      }
     }
   }
 }

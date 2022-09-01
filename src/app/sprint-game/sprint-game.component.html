@@ -6,6 +6,7 @@
         <h3>Правила:</h3>
         <li class="rules__item">Используйте мышь для выбора</li>
         <li class="rules__item">Используйте клавиши влево и вправо</li>
+        <li class="rules__item">Используйте Escape чтобы начать заново</li>
       </ol>
       <h3>Выберите уровень сложности</h3>
       <div class="sprint-menu__levels">
@@ -45,8 +46,8 @@
         <span class="en-word">{{ word }}</span>
       </div>
       <div class="sprint-play__answers">
-        <button class="btn sprint__answer-btn answer-wrong__btn" (click)="checkMouseAnswer(false)"><mat-icon>keyboard_arrow_left</mat-icon> Неверно</button>
-        <button class="btn sprint__answer-btn answer-right__btn" (click)="checkMouseAnswer(true)">Верно <mat-icon>keyboard_arrow_right</mat-icon></button>
+        <button class="btn sprint__answer-btn answer-wrong__btn" (click)="checkAnswer(false)"><mat-icon>keyboard_arrow_left</mat-icon> Неверно</button>
+        <button class="btn sprint__answer-btn answer-right__btn" (click)="checkAnswer(true)">Верно <mat-icon>keyboard_arrow_right</mat-icon></button>
       </div>
       <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
