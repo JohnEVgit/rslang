@@ -23,16 +23,30 @@
 
   <ng-template ngSwitchCase="play">
     <div class="sprint-play">
+      <div class="sprint-play__score">
+        <span class="score">{{ score }}</span>
+      </div>
+      <div class="sprint-play__icons">
+        <mat-icon style="color: green" *ngIf="(currentStreak > 0 && currentStreak < 3) || scorePoints === 80">check_circle</mat-icon>
+        <mat-icon style="color: green" *ngIf="(currentStreak > 1 && currentStreak < 3) || scorePoints === 80">check_circle</mat-icon>
+        <mat-icon style="color: green" *ngIf="scorePoints === 80">check_circle</mat-icon>
+        <mat-icon *ngIf="currentStreak < 1 && scorePoints < 80">radio_button_unchecked</mat-icon>
+        <mat-icon *ngIf="currentStreak < 2 && scorePoints < 80">radio_button_unchecked</mat-icon>
+        <mat-icon *ngIf="scorePoints < 80">radio_button_unchecked</mat-icon>
+      </div>
+      <div class="sprint-play__score-points">
+        <span class="score-points">{{ scorePoints }} очков за слово!</span>
+      </div>
       <div class="sprint-play__seconds">
-        <span class="seconds">Осталось {{ time }}</span> сек.
+        <div class="seconds">{{ time }}</div>
       </div>
-      <div class="sprint__answers">
-        <p>{{ word }}</p>
-        <p>{{ wordTranslate }}</p>
+      <div class="sprint-play__words">
+        <span class="ru-word">{{ wordTranslate }}</span>
+        <span class="en-word">{{ word }}</span>
       </div>
-      <div class="sprint__answers">
-        <button class="btn sprint__right-btn" (click)="checkMouseAnswer(true)">Верно</button>
-        <button class="btn sprint__wrong-btn" (click)="checkMouseAnswer(false)">Неверно</button>
+      <div class="sprint-play__answers">
+        <button class="btn sprint__answer-btn answer-wrong__btn" (click)="checkMouseAnswer(false)"><mat-icon>keyboard_arrow_left</mat-icon> Неверно</button>
+        <button class="btn sprint__answer-btn answer-right__btn" (click)="checkMouseAnswer(true)">Верно <mat-icon>keyboard_arrow_right</mat-icon></button>
       </div>
       <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
     </div>
