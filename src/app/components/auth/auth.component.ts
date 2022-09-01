@@ -1,9 +1,11 @@
+/* eslint-disable max-len */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { HeaderComponent } from 'src/app/header/header.component';
 import { AuthModalService } from 'src/app/services/auth-modal.service';
 
 @Component({
@@ -77,9 +79,13 @@ export class AuthComponent implements OnInit {
       const content = await rawResponse.json();
 
       console.log(content);
+      localStorage.setItem('JWT', content.token);
+      localStorage.setItem('ID', content.userId);
+      localStorage.setItem('NAME', content.name);
+      localStorage.setItem('refreshToken', content.refreshToken);
     };
 
-    loginUser(this.form.value).then(() => this.authModalService.close());
+    loginUser(this.form.value).then(() => this.authModalService.close()).then(() => HeaderComponent.prototype.logoutVis());
   }
 
   submitS() {
@@ -96,7 +102,6 @@ export class AuthComponent implements OnInit {
       const content = await rawResponse.json();
 
       console.log(content);
-      localStorage.setItem('JWT', content);
     };
 
     createUser(this.signup.value).then(() => this.authModalService.close());

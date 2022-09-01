@@ -9,7 +9,7 @@
             <span class="alert" *ngIf="email.errors?.['minlength'] && email.touched ">Too short email. Now {{ email.value.length }}</span>
 			<input type="password" placeholder="Password" formControlName="password" />
             <span class="alert" *ngIf="password.errors?.['minlength'] && password.touched ">Too short password. Now {{ password.value.length }}</span>
-			<button type="submit" [disabled]="form.invalid" >Sign In</button>
+			<button type="submit" [disabled]="form.invalid">Sign In</button>
 		</form>
 	</div>
 	<div class="overlay-container">
