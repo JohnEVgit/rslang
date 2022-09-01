@@ -159,7 +159,7 @@
   .sprint__statistics {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 30px;
 
     .sprint__right-answers, .sprint__wrong-answers {
       display: flex;
@@ -197,4 +197,9 @@
     margin: 10px 100px 20px;
   }
 
+}
+
+.change-sprint__end {
+  max-width: 600px;
+  height: 600px;
 }

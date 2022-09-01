@@ -1,4 +1,4 @@
-<div class="sprint" [ngSwitch]="gameStatus">
+<div class="sprint" [ngClass]="{ 'change-sprint__end': gameStatus === 'end'}"  [ngSwitch]="gameStatus">
   <ng-template ngSwitchCase="menu">
     <h2>Спринт</h2>
     <div class="sprint-menu">
