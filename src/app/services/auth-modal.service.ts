@@ -9,12 +9,20 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthModalService {
   isVisible$ = new BehaviorSubject<boolean>(false);
 
+  local = localStorage;
+
   open() {
     this.isVisible$.next(true);
   }
 
   close() {
     this.isVisible$.next(false);
+  }
+
+  clearStorage() {
+    if (localStorage.length > 0) {
+      this.local.clear();
+    }
   }
 
   constructor() { }

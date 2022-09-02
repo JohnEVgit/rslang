@@ -16,6 +16,14 @@ export class HeaderComponent {
 
   }
 
+  public visibility = false;
+
+  logoutVis() {
+    if (localStorage.length > 0) {
+      this.visibility = true;
+    }
+  }
+
   isOpenMenu = false;
 
   toggleMenu(): void {
