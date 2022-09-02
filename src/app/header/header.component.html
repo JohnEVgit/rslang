@@ -29,7 +29,10 @@
             </ul>
         </nav>
         <div class="header__auth header-auth">
-            <button class="header-auth__btn btn btn--theme-link" type="button" (click)="authModalService.open()">Вход</button>
+            <button class="header-auth__btn btn btn--theme-link invisible" type="button" [class.invisible]="visibility" (click)="authModalService.clearStorage()">Выход </button>
+            <button class="header-auth__btn btn btn--theme-link" type="button" (click)="authModalService.open() ">
+                Вход <a routerLink="/auth" ></a>
+            </button>
             <button class="header-auth__btn btn btn--theme-primary" type="button" (click)="authModalService.open()">Регистрация</button>
         </div>
     </div>
