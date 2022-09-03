@@ -25,5 +25,11 @@ export class AuthModalService {
     }
   }
 
-  constructor() { }
+  public getToken() {
+    return this.local.getItem('JWT');
+  }
+
+  public getUserId() {
+    return this.local.getItem('ID');
+  }
 }

@@ -77,12 +77,14 @@ export class AuthComponent implements OnInit {
         body: JSON.stringify(user),
       });
       const content = await rawResponse.json();
-
-      console.log(content);
       localStorage.setItem('JWT', content.token);
       localStorage.setItem('ID', content.userId);
       localStorage.setItem('NAME', content.name);
       localStorage.setItem('refreshToken', content.refreshToken);
+
+      if (content.message === 'Authenticated') {
+        console.log('Authencticated');
+      }
     };
 
     loginUser(this.form.value).then(() => this.authModalService.close()).then(() => HeaderComponent.prototype.logoutVis());
