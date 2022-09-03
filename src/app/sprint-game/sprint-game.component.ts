@@ -132,6 +132,11 @@ export class SprintGameComponent implements OnDestroy {
       this.currentStreak += 1;
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
+      const obj = {
+        difficulty: 'studied',
+        optional: {},
+      };
+      this.sprintGameService.createUserWord(word.id, obj).subscribe(() => {});
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
         if (this.scorePoints < 80) {

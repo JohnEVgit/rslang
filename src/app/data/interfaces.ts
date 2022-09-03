@@ -14,4 +14,13 @@ export interface Word {
   textMeaningTranslate: string;
   textExampleTranslate: string;
   responseOptions?: string[];
+  userWord?: {
+    difficulty?: string;
+    optional?: {};
+  };
+}
+
+export interface UserWord {
+  difficulty: string;
+  optional: {};
 }
