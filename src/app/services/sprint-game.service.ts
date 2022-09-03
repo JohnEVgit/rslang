@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {UserWord, Word} from '../data/interfaces';
-import { AuthModalService } from './auth-modal.service';
+import { Word } from '../data/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +13,7 @@ export class SprintGameService {
 
   public pagesArray: number[] = [];
 
-  constructor(private http: HttpClient, private authModalService: AuthModalService) { }
+  constructor(private http: HttpClient) { }
 
   public getWords(group: number, page?: number | undefined): Observable<Word[]> {
     if (!page) {
@@ -30,8 +29,4 @@ export class SprintGameService {
     return this.http.get<Word[]>(`https://angular-learnwords.herokuapp.com/words?group=${group}&page=${page}`);
   }
 
-  public createUserWord(wordId: string, obj: UserWord) {
-    const userId = this.authModalService.getUserId();
-    return this.http.post(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
-  }
 }

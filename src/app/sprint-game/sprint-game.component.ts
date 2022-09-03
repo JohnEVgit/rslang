@@ -2,6 +2,7 @@ import {Component, HostListener, OnDestroy} from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
+import { UserWordsService } from '../services/user-words.service';
 
 @Component({
   selector: 'app-sprint-game',
@@ -43,7 +44,7 @@ export class SprintGameComponent implements OnDestroy {
 
   public wrongAnswers: Word[] = [];
 
-  constructor(private sprintGameService: SprintGameService) {}
+  constructor(private sprintGameService: SprintGameService, private userWordsService: UserWordsService) {}
 
   ngOnDestroy(): void {
     this.menuGame();
@@ -136,7 +137,7 @@ export class SprintGameComponent implements OnDestroy {
         difficulty: 'studied',
         optional: {},
       };
-      this.sprintGameService.createUserWord(word.id, obj).subscribe(() => {});
+      this.userWordsService.createUserWord(word.id, obj).subscribe(() => {});
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
         if (this.scorePoints < 80) {
