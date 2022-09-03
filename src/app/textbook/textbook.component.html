@@ -13,9 +13,27 @@
             </ul>
         </div>
 
+        <div class="spinner" [ngClass]="{ 'hidden': !loading }">
+            <div class="spinner__elem"></div>
+        </div>
+
         <div class="main__textbook textbook">
             <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: 20, currentPage: page, totalItems: total }; index as i">
                 <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
+                <div class="textbook__progress">
+                    <div class="textbook__correct">
+                        <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-check2"></use>
+                        </svg>
+                        <span class="textbook__count">9</span>
+                    </div>
+                    <div class="textbook__incorrect">
+                        <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-close"></use>
+                        </svg>
+                        <span class="textbook__count">10</span>
+                    </div>
+                </div>
                 <div class="textbook__info"
                 [class.textbook__info--is-learned]="i === 0"
                 [class.textbook__info--is-difficult]="i === 1">
@@ -66,6 +84,14 @@
             [screenReaderPaginationLabel]="'Пагинация'"
             [screenReaderPageLabel]="'Страница'"
             [screenReaderCurrentLabel]="'Вы на странице'"></pagination-controls>
+        </div>
+
+        <div class="games" [ngClass]="{ 'hidden': loading }">
+            <p class="games__title">Тренировать слова в играх</p>
+            <div class="games__list">
+                <a class="games__link btn btn--theme-primary" routerLink="/audio-call-game">Аудиовызов</a>
+                <a class="games__link btn btn--theme-primary">Спринт</a>
+            </div>
         </div>
     </div>
 </main>

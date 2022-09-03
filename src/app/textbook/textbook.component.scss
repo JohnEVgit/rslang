@@ -140,6 +140,7 @@
     gap: 20px;
 
     &__elem {
+        position: relative;
         display: flex;
         width: calc(50% - 10px);
         background-color: var(--color-bg-light);
@@ -314,7 +315,35 @@
         margin-top: 3px;
         margin-bottom: 0;
     }
+
+    &__progress {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        gap: 12px;
+        background-color: rgba(255,255,255,0.7);
+        padding: 4px 8px;
+        border-radius: 0 10px 0 0;
+        box-shadow: 0 0 5px var(--color-shadow-dark);
+    }
+
+    &__correct,
+    &__incorrect {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    &__correct {
+        color: green;
+    }
+
+    &__incorrect {
+        color: red;
+    }
 }
+
 
 @keyframes playAudio {
     0% {
@@ -331,30 +360,43 @@
 }
 
 .spinner {
-    position: absolute;
-    width: 100px;
-    height: 100px;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-spinner-opacity);
+    z-index: 10;
 
-    &::before,
-    &::after {
-        content: '';
+    &__elem {
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background-color: var(--color-main);
-    }
+        width: 100px;
+        height: 100px;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
 
-    &::after {
-        animation: spinner infinite 1s;
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--color-main);
+        }
+
+        &::after {
+            animation: spinner infinite 1s;
+        }
     }
 }
 
@@ -454,6 +496,29 @@
                 border: 1px solid var(--color-text);
             }
         }
+    }
+}
+
+.games {
+    text-align: center;
+
+    &__title {
+        margin: 0 0 12px;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    &__list {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    &__link {
+        text-decoration: none;
+        padding: 8px 16px;
+        font-size: 16px;
     }
 }
 
