@@ -76,8 +76,6 @@ export class AuthComponent implements OnInit {
         body: JSON.stringify(user),
       });
       const content = await rawResponse.json();
-
-      console.log(content);
       localStorage.setItem('JWT', content.token);
       localStorage.setItem('ID', content.userId);
       localStorage.setItem('NAME', content.name);
