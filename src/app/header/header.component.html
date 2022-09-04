@@ -28,12 +28,12 @@
                 </li>
             </ul>
         </nav>
-        <div class="header__auth header-auth">
-            <button class="header-auth__btn btn btn--theme-link invisible" type="button" [class.invisible]="visibility" (click)="authModalService.clearStorage()">Выход </button>
-            <button class="header-auth__btn btn btn--theme-link" type="button" (click)="authModalService.open() ">
+        <div class="header__auth header-auth" >
+            <button class="header-auth__btn btn btn--theme-link invisible" type="button" [class.invisible]="!authModalService.authenticated" (click)="authModalService.clearStorage()">Выход </button>
+            <button class="header-auth__btn btn btn--theme-link" type="button" [class.invisible]="authModalService.authenticated" (click)="authModalService.open()">
                 Вход <a routerLink="/auth" ></a>
             </button>
-            <button class="header-auth__btn btn btn--theme-primary" type="button" (click)="authModalService.open()">Регистрация</button>
+            <button class="header-auth__btn btn btn--theme-primary" type="button"  [class.invisible]="authModalService.authenticated" (click)="authModalService.open()">Регистрация</button>
         </div>
     </div>
 </header>
