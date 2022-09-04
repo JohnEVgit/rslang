@@ -19,7 +19,7 @@
         </div>
 
         <div class="main__textbook textbook">
-            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: 20, currentPage: page, totalItems: total }; index as i">
+            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: wordsPerPage, currentPage: page, totalItems: total }; index as i">
                 <div class="textbook__picture">
                     <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
                     <div class="textbook__progress" *ngIf="isAuth && word.userWord">
@@ -42,22 +42,24 @@
                     [class.textbook__info--is-difficult]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
                     <h2 class="textbook__name">{{word.word}}</h2>
                     <button class="textbook__audio" type="button" aria-label="Проиграть аудио"
-                    (click)="playAudio(word.id)"
-                    [class.textbook__audio--is-active]="isPlayAudio && currentId === word.id"
+                    (click)="playAudio(word._id || word.id)"
+                    [class.textbook__audio--is-active]="isPlayAudio && (currentId === word._id || currentId === word.id)"
                     [disabled]="isPlayAudio"
                     >
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
                         </svg>
                     </button>
-                    <button class="textbook__difficult" type="button"
+                    <button class="textbook__difficult" type="button" aria-label="Добавить в сложные слова/убрать из сложных слов"
+                    (click)="toggleDifficult(word._id || word.id, 'hard')"
                     *ngIf="isAuth"
                     [class.textbook__difficult--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
                         </svg>
                     </button>
-                    <button class="textbook__learned" type="button"
+                    <button class="textbook__learned" type="button" aria-label="Добавить в изученные/убрать из изученных"
+                    (click)="toggleDifficult(word._id || word.id, 'studied')"
                     *ngIf="isAuth"
                     [class.textbook__learned--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'studied'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
@@ -83,7 +85,7 @@
         </div>
 
         <div class="pagination" [ngClass]="{ 'hidden': loading }">
-            <pagination-controls (pageChange)="isAuth ? getAuthPage($event) : getPage($event)" id="server"
+            <pagination-controls (pageChange)="isAuth ? getAuthPage($event, true) : getPage($event)" id="server"
             [previousLabel]="'Предыдущая'"
             [nextLabel]="'Следующая'"
             [screenReaderPaginationLabel]="'Пагинация'"

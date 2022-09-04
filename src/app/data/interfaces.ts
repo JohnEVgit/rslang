@@ -21,6 +21,7 @@ export interface Word {
       wrongAnswers?: number;
     };
   };
+  _id?: string;
 }
 
 export interface UserWord {

@@ -46,7 +46,7 @@ export class TextbookComponent implements OnInit {
       this.getPage(this.page);
     } else {
       console.log(456);
-      this.getAuthPage(this.page);
+      this.getAuthPage(this.page, true);
     }
   }
 
@@ -62,9 +62,13 @@ export class TextbookComponent implements OnInit {
     });
   }
 
-  getAuthPage(page: number): void {
+  getAuthPage(page: number, isScroll: boolean): void {
     this.loading = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (isScroll) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     const userId = this.authModalService.getUserId()!;
     this.userWordsService.getUserTextbookWords(userId, this.group - 1, page - 1)
       .subscribe((response) => {
@@ -88,7 +92,7 @@ export class TextbookComponent implements OnInit {
       this.getPage(1);
     } else {
       console.log(456);
-      this.getAuthPage(1);
+      this.getAuthPage(1, true);
     }
   }
 
@@ -114,5 +118,57 @@ export class TextbookComponent implements OnInit {
         });
       });
     });
+  }
+
+  toggleDifficult(id: string, difficulty: string): void {
+    const userId = this.authModalService.getUserId()!;
+    this.userWordsService.getUserWord(userId, id).subscribe((word) => {
+      console.log(word);
+      if (word.userWord?.difficulty) {
+        if (word.userWord?.difficulty === difficulty) {
+          const obj = {
+            difficulty: 'empty',
+            optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+          };
+
+          this.userWordsService
+            .updateUserWord(userId, id, obj)
+            .subscribe(() => {
+              this.getAuthPage(this.page, false);
+            });
+        } else if (word.userWord?.difficulty !== difficulty) {
+          const obj = {
+            difficulty,
+            optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+          };
+
+          this.userWordsService
+            .updateUserWord(userId, id, obj)
+            .subscribe(() => {
+              this.getAuthPage(this.page, false);
+            });
+        }
+      } else {
+        const obj = {
+          difficulty,
+          optional: { rightAnswers: 0, wrongAnswers: 0 },
+        };
+        this.userWordsService
+          .createUserTextbookWord(userId, id, obj)
+          .subscribe(() => {
+            this.getAuthPage(this.page, false);
+          });
+      }
+    });
+
+    // if ((this.randomWords[this.wordIndex] as Word).userWord?.difficulty) {
+    //   this.userWordsService
+    //     .updateUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
+    //     .subscribe(() => {});
+    // } else {
+    //   this.userWordsService
+    //     .createUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
+    //     .subscribe(() => {});
+    // }
   }
 }
