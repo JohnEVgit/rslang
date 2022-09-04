@@ -3,6 +3,7 @@ import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
+import { AuthModalService } from '../services/auth-modal.service';
 
 @Component({
   selector: 'app-sprint-game',
@@ -44,7 +45,11 @@ export class SprintGameComponent implements OnDestroy {
 
   public wrongAnswers: Word[] = [];
 
-  constructor(private sprintGameService: SprintGameService, private userWordsService: UserWordsService) {}
+  constructor(
+    private sprintGameService: SprintGameService,
+    private userWordsService: UserWordsService,
+    private authModalService: AuthModalService,
+  ) {}
 
   ngOnDestroy(): void {
     this.menuGame();
@@ -59,14 +64,26 @@ export class SprintGameComponent implements OnDestroy {
   private getWords(group: number) {
     this.randomWords = [];
     this.wordIndex = 0;
-    this.sprintGameService.getWords(group)
-      .subscribe((words) => {
-        words.forEach((word) => {
-          this.randomWords.push(word);
+    if (!this.authModalService.authenticated) {
+      this.sprintGameService.getWords(group)
+        .subscribe((words) => {
+          words.forEach((word) => {
+            this.randomWords.push(word);
+          });
+          this.generateQuestion();
+          this.isStartDisabled = false;
         });
-        this.generateQuestion();
-        this.isStartDisabled = false;
-      });
+    } else {
+      const userId = this.authModalService.getUserId()!;
+      this.userWordsService.getUserWords(userId, group)
+        .subscribe((words) => {
+          words.forEach((word) => {
+            this.randomWords.push(word);
+          });
+          this.generateQuestion();
+          this.isStartDisabled = false;
+        });
+    }
   }
 
   private generateQuestion(): void {
@@ -133,11 +150,9 @@ export class SprintGameComponent implements OnDestroy {
       this.currentStreak += 1;
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
-      const obj = {
-        difficulty: 'studied',
-        optional: {},
-      };
-      this.userWordsService.createUserWord(word.id, obj).subscribe(() => {});
+      if (this.authModalService.authenticated) {
+        this.createDifficulty('studied');
+      }
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
         if (this.scorePoints < 80) {
@@ -149,9 +164,29 @@ export class SprintGameComponent implements OnDestroy {
       this.currentStreak = 0;
       this.scorePoints = 10;
       this.wrongAnswers.push(word);
+      if (this.authModalService.authenticated) {
+        this.createDifficulty('hard');
+      }
     }
     this.wordIndex += 1;
     this.nextQuestion();
+  }
+
+  private createDifficulty(difficulty: string) {
+    const userId = this.authModalService.getUserId()!;
+    const obj = {
+      difficulty,
+      optional: {},
+    };
+    if ((this.randomWords[this.wordIndex] as Word).userWord?.difficulty) {
+      this.userWordsService
+        .updateUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
+        .subscribe(() => {});
+    } else {
+      this.userWordsService
+        .createUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
+        .subscribe(() => {});
+    }
   }
 
   public createAudio(audioPath: string | undefined, isWordAudio?: boolean): void {

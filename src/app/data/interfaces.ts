@@ -1,5 +1,6 @@
 export interface Word {
   id: string;
+  _id: string;
   group: number;
   page: number;
   word: string;
@@ -23,4 +24,9 @@ export interface Word {
 export interface UserWord {
   difficulty: string;
   optional: {};
+}
+
+export interface WordPage {
+  paginatedResults: Word[];
+  totalCount: number;
 }
