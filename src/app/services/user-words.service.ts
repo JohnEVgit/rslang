@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { UserWord, Word, WordPage } from '../data/interfaces';
+import { UserWord, WordPage } from '../data/interfaces';
 import { SprintGameService } from './sprint-game.service';
 
 @Injectable({
@@ -23,7 +23,6 @@ export class UserWordsService {
     if (!page) {
       wordsPage = this.sprintGameService.getRandomPage();
     }
-    console.log(wordsPage);
     return this.http
       .get(
         `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,

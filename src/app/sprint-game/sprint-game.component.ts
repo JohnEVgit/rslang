@@ -1,7 +1,7 @@
 import {Component, HostListener, OnDestroy} from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
-import { Word } from '../data/interfaces';
+import {UserWord, Word} from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 
@@ -151,7 +151,7 @@ export class SprintGameComponent implements OnDestroy {
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
       if (this.authModalService.authenticated) {
-        this.createDifficulty('studied');
+        this.createDifficulty('studied', true);
       }
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
@@ -165,19 +165,38 @@ export class SprintGameComponent implements OnDestroy {
       this.scorePoints = 10;
       this.wrongAnswers.push(word);
       if (this.authModalService.authenticated) {
-        this.createDifficulty('hard');
+        this.createDifficulty('hard', false);
       }
     }
     this.wordIndex += 1;
     this.nextQuestion();
   }
 
-  private createDifficulty(difficulty: string) {
+  private createDifficulty(difficulty: string, isRight: boolean) {
     const userId = this.authModalService.getUserId()!;
-    const obj = {
+    let wrongAnswers = 0;
+    let rightAnswers = 0;
+    let obj: UserWord = {
       difficulty,
-      optional: {},
+      optional: { rightAnswers: isRight ? 1 : 0, wrongAnswers: !isRight ? 1 : 0 },
     };
+    if ((this.randomWords[this.wordIndex] as Word)
+      .userWord?.optional) {
+      rightAnswers = (this.randomWords[this.wordIndex] as Word)
+        .userWord?.optional?.rightAnswers!;
+      wrongAnswers = (this.randomWords[this.wordIndex] as Word)
+        .userWord?.optional?.wrongAnswers!
+      if (isRight) {
+        rightAnswers += 1;
+      } else {
+        wrongAnswers += 1;
+      }
+      obj = {
+        difficulty,
+        optional: { rightAnswers, wrongAnswers },
+      };
+    }
+
     if ((this.randomWords[this.wordIndex] as Word).userWord?.difficulty) {
       this.userWordsService
         .updateUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
