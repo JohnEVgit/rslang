@@ -41,8 +41,4 @@ export class AuthModalService {
   public getUserId() {
     return this.local.getItem('ID');
   }
-
-  public checkAuthenticated() {
-    this.authenticated = !!localStorage.length;
-  }
 }

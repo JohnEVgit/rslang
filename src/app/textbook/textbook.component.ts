@@ -18,7 +18,7 @@ export class TextbookComponent implements OnInit {
 
   currentId = '';
 
-  isAuth: boolean = true; // this.authModalService.authenticated
+  isAuth: boolean = this.authModalService.authenticated;
 
   wordStudiedCount = 0;
 
