@@ -11,6 +11,8 @@ export class AuthModalService {
 
   local = localStorage;
 
+  authenticated = false;
+
   open() {
     this.isVisible$.next(true);
   }
@@ -22,7 +24,12 @@ export class AuthModalService {
   clearStorage() {
     if (localStorage.length > 0) {
       this.local.clear();
+      this.authenticated = false;
     }
+  }
+
+  public checkAuthenticated() {
+    this.authenticated = !!localStorage.length;
   }
 
   constructor() { }
