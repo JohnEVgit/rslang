@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Word } from '../data/interfaces';
+import { UserWordsService } from '../services/user-words.service';
+import { AuthModalService } from '../services/auth-modal.service';
 
 @Component({
   selector: 'app-textbook',
@@ -16,6 +18,12 @@ export class TextbookComponent implements OnInit {
 
   currentId = '';
 
+  isAuth: boolean = true; // this.authModalService.authenticated
+
+  wordStudiedCount = 0;
+
+  wordsPerPage = 20;
+
   group: number = Number(localStorage.getItem('group')) || 1;
 
   groupArr: number[] = [1, 2, 3, 4, 5, 6];
@@ -26,10 +34,20 @@ export class TextbookComponent implements OnInit {
 
   loading: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private userWordsService: UserWordsService,
+    private authModalService: AuthModalService,
+  ) { }
 
   ngOnInit(): void {
-    this.getPage(this.page);
+    if (!this.isAuth) {
+      console.log(123);
+      this.getPage(this.page);
+    } else {
+      console.log(456);
+      this.getAuthPage(this.page);
+    }
   }
 
   getPage(page: number): void {
@@ -44,11 +62,34 @@ export class TextbookComponent implements OnInit {
     });
   }
 
+  getAuthPage(page: number): void {
+    this.loading = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const userId = this.authModalService.getUserId()!;
+    this.userWordsService.getUserTextbookWords(userId, this.group - 1, page - 1)
+      .subscribe((response) => {
+        console.log('Response', response);
+        this.words = response;
+        this.page = page;
+        this.loading = false;
+
+        this.wordStudiedCount = this.words.reduce((sum, elem) => (elem.userWord?.difficulty === 'studied' ? sum + 1 : sum), 0);
+        console.log(this.wordStudiedCount);
+      });
+  }
+
   changeGroup(event: Event): void {
     const thisTarget = event.target as HTMLButtonElement;
     this.group = Number(thisTarget.textContent);
     localStorage.setItem('group', String(this.group));
-    this.getPage(1);
+
+    if (!this.isAuth) {
+      console.log(123);
+      this.getPage(1);
+    } else {
+      console.log(456);
+      this.getAuthPage(1);
+    }
   }
 
   playAudio(id: string): void {
