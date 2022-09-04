@@ -42,10 +42,8 @@ export class TextbookComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.isAuth) {
-      console.log(123);
       this.getPage(this.page);
     } else {
-      console.log(456);
       this.getAuthPage(this.page, true);
     }
   }
@@ -78,7 +76,6 @@ export class TextbookComponent implements OnInit {
         this.loading = false;
 
         this.wordStudiedCount = this.words.reduce((sum, elem) => (elem.userWord?.difficulty === 'studied' ? sum + 1 : sum), 0);
-        console.log(this.wordStudiedCount);
       });
   }
 
@@ -88,10 +85,8 @@ export class TextbookComponent implements OnInit {
     localStorage.setItem('group', String(this.group));
 
     if (!this.isAuth) {
-      console.log(123);
       this.getPage(1);
     } else {
-      console.log(456);
       this.getAuthPage(1, true);
     }
   }
@@ -123,7 +118,6 @@ export class TextbookComponent implements OnInit {
   toggleDifficult(id: string, difficulty: string): void {
     const userId = this.authModalService.getUserId()!;
     this.userWordsService.getUserWord(userId, id).subscribe((word) => {
-      console.log(word);
       if (word.userWord?.difficulty) {
         if (word.userWord?.difficulty === difficulty) {
           const obj = {
@@ -160,15 +154,5 @@ export class TextbookComponent implements OnInit {
           });
       }
     });
-
-    // if ((this.randomWords[this.wordIndex] as Word).userWord?.difficulty) {
-    //   this.userWordsService
-    //     .updateUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
-    //     .subscribe(() => {});
-    // } else {
-    //   this.userWordsService
-    //     .createUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
-    //     .subscribe(() => {});
-    // }
   }
 }
