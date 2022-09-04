@@ -1,0 +1,87 @@
+<div class="sprint" [ngClass]="{ 'change-sprint__end': gameStatus === 'end'}"  [ngSwitch]="gameStatus">
+  <ng-template ngSwitchCase="menu">
+    <h2>Спринт</h2>
+    <div class="sprint-menu">
+      <ol class="sprint__rules">
+        <h3>Правила:</h3>
+        <li class="rules__item">Используйте мышь для выбора</li>
+        <li class="rules__item">Используйте клавиши влево и вправо</li>
+        <li class="rules__item">Используйте Escape чтобы начать заново</li>
+      </ol>
+      <h3>Выберите уровень сложности</h3>
+      <div class="sprint-menu__levels">
+        <button class="btn levels__btn"
+                *ngFor="let level of levels; let i = index"
+                (click)="
+                  chooseLevel(i);
+                  addClass($event);
+                "
+        >{{ level }}</button>
+      </div>
+      <button class="btn sprint-menu__btn" [disabled] = "isStartDisabled" (click)="playGame();">Старт</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="play">
+    <div class="sprint-play">
+      <div class="sprint-play__score">
+        <span class="score">{{ score }}</span>
+      </div>
+      <div class="sprint-play__icons">
+        <mat-icon style="color: green" *ngIf="(currentStreak > 0 && currentStreak < 3) || scorePoints === 80">check_circle</mat-icon>
+        <mat-icon style="color: green" *ngIf="(currentStreak > 1 && currentStreak < 3) || scorePoints === 80">check_circle</mat-icon>
+        <mat-icon style="color: green" *ngIf="scorePoints === 80">check_circle</mat-icon>
+        <mat-icon *ngIf="currentStreak < 1 && scorePoints < 80">radio_button_unchecked</mat-icon>
+        <mat-icon *ngIf="currentStreak < 2 && scorePoints < 80">radio_button_unchecked</mat-icon>
+        <mat-icon *ngIf="scorePoints < 80">radio_button_unchecked</mat-icon>
+      </div>
+      <div class="sprint-play__score-points">
+        <span class="score-points">{{ scorePoints }} очков за слово!</span>
+      </div>
+      <div class="sprint-play__seconds">
+        <div class="seconds">{{ time }}</div>
+      </div>
+      <div class="sprint-play__words">
+        <span class="ru-word">{{ wordTranslate }}</span>
+        <span class="en-word">{{ word }}</span>
+      </div>
+      <div class="sprint-play__answers">
+        <button class="btn sprint__answer-btn answer-wrong__btn" (click)="checkAnswer(false)"><mat-icon>keyboard_arrow_left</mat-icon> Неверно</button>
+        <button class="btn sprint__answer-btn answer-right__btn" (click)="checkAnswer(true)">Верно <mat-icon>keyboard_arrow_right</mat-icon></button>
+      </div>
+      <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="end">
+    <h2>Статистика</h2>
+    <div class="sprint-end">
+      <div class="sprint__statistics">
+        <ul class="sprint__right-answers">
+          <h3 class="answers__title">Правильные ответы ({{rightAnswers.length}}):</h3>
+          <li class="right-answers__item" *ngFor="let rightAnswer of rightAnswers">
+            <div class="item__sound" (click)="createAudio(rightAnswer.audio, true)"></div>
+            <p class="item__word">
+              {{ rightAnswer.word }} -
+              <span class="word-translate">{{ rightAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+        <ul class="sprint__wrong-answers">
+          <h3 class="answers__title">Неправильные ответы ({{wrongAnswers.length}}):</h3>
+          <li class="wrong-answers__item" *ngFor="let wrongAnswer of wrongAnswers">
+            <div class="item__sound" (click)="createAudio(wrongAnswer.audio, true)"></div>
+            <p class="item__word">
+              {{ wrongAnswer.word }} -
+              <span class="word-translate">{{ wrongAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <button class="btn sprint__exit-btn" (click)="menuGame()">Начать заново</button>
+    </div>
+  </ng-template>
+</div>
+
+
+
