@@ -147,7 +147,6 @@
     gap: 20px;
 
     &__elem {
-        position: relative;
         display: flex;
         width: calc(50% - 10px);
         background-color: var(--color-bg-light);
@@ -161,11 +160,16 @@
         }
     }
 
+    &__picture {
+        position: relative;
+        width: 40%;
+        box-shadow: 0 0 5px var(--color-shadow-dark);
+    }
+
     &__img {
         object-fit: cover;
         height: 100%;
-        width: 40%;
-        box-shadow: 0 0 5px var(--color-border);
+        width: 100%;
     }
 
     &__info {
@@ -552,10 +556,15 @@
             display: block;
         }
 
-        &__img {
+        &__picture {
             height: auto;
             max-height: 300px;
             width: 100%;
+        }
+
+        &__img {
+            height: auto;
+            max-height: 300px;
         }
     
         &__info {
