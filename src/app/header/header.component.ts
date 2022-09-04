@@ -1,5 +1,5 @@
 import {
-  Component, Output, EventEmitter,
+  Component, Output, EventEmitter, OnInit,
 } from '@angular/core';
 import { AuthModalService } from '../services/auth-modal.service';
 
@@ -9,20 +9,18 @@ import { AuthModalService } from '../services/auth-modal.service';
   styleUrls: ['./header.component.scss'],
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Output() toggleMenuEvent = new EventEmitter<boolean>();
 
   constructor(public authModalService: AuthModalService) {
 
   }
 
-  public visibility = false;
-
-  logoutVis() {
-    if (localStorage.length > 0) {
-      this.visibility = true;
-    }
+  ngOnInit(): void {
+    this.authModalService.checkAuthenticated();
   }
+
+  public visibility = false;
 
   isOpenMenu = false;
 
