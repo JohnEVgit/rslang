@@ -56,6 +56,14 @@
   <ng-template ngSwitchCase="end">
     <h2>Статистика</h2>
     <div class="sprint-end">
+      <div class="sprint__score">
+        <h3>Ваш результат: {{ score }} очков</h3>
+        <mat-progress-spinner
+          color="warn"
+          [value]="rightAnswersPercent">
+        </mat-progress-spinner>
+        <span class="percent">{{ rightAnswersPercent }}%</span>
+      </div>
       <div class="sprint__statistics">
         <ul class="sprint__right-answers">
           <h3 class="answers__title">Правильные ответы ({{rightAnswers.length}}):</h3>

@@ -1,7 +1,7 @@
-import {Component, HostListener, OnDestroy} from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
-import {UserWord, Word} from '../data/interfaces';
+import { UserWord, Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 
@@ -44,6 +44,8 @@ export class SprintGameComponent implements OnDestroy {
   public rightAnswers: Word[] = [];
 
   public wrongAnswers: Word[] = [];
+
+  public rightAnswersPercent = 0;
 
   constructor(
     private sprintGameService: SprintGameService,
@@ -110,12 +112,15 @@ export class SprintGameComponent implements OnDestroy {
   }
 
   public playGame(): void {
-    this.time = 30;
+    this.time = 5;
     this.gameStatus = 'play';
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
       if (this.time === 0) {
         this.gameStatus = 'end';
+        this.rightAnswersPercent = Math.floor(
+          (this.rightAnswers.length / (this.rightAnswers.length + this.wrongAnswers.length)) * 100,
+        );
       }
     });
   }
@@ -185,7 +190,7 @@ export class SprintGameComponent implements OnDestroy {
       rightAnswers = (this.randomWords[this.wordIndex] as Word)
         .userWord?.optional?.rightAnswers!;
       wrongAnswers = (this.randomWords[this.wordIndex] as Word)
-        .userWord?.optional?.wrongAnswers!
+        .userWord?.optional?.wrongAnswers!;
       if (isRight) {
         rightAnswers += 1;
       } else {
