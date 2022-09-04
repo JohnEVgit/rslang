@@ -83,7 +83,7 @@ export class AuthComponent implements OnInit {
       localStorage.setItem('refreshToken', content.refreshToken);
 
       if (content.message === 'Authenticated') {
-        console.log('Authencticated');
+        this.authModalService.authenticated = true;
       }
     };
 
