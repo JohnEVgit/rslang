@@ -1,4 +1,6 @@
-import {Component, HostListener, OnDestroy} from '@angular/core';
+/* eslint-disable max-len */
+/* eslint-disable class-methods-use-this */
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';

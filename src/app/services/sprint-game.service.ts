@@ -28,5 +28,4 @@ export class SprintGameService {
     }
     return this.http.get<Word[]>(`https://angular-learnwords.herokuapp.com/words?group=${group}&page=${page}`);
   }
-
 }

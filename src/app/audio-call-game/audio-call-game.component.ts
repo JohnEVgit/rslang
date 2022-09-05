@@ -1,4 +1,5 @@
-import {Component, HostListener} from '@angular/core';
+/* eslint-disable class-methods-use-this */
+import { Component, HostListener } from '@angular/core';
 import { Word } from '../data/interfaces';
 import { AudioCallGameService } from '../services/audio-call-game.service';
 

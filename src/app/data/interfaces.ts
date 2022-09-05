@@ -33,3 +33,8 @@ export interface WordPage {
   paginatedResults: Word[];
   totalCount: number;
 }
+
+export interface Stats {
+  learnedWords: number;
+  optional: {};
+}
