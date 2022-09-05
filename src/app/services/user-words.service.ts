@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';

@@ -29,7 +29,6 @@ export class SprintGameService {
     return this.http.get<Word[]>(`https://angular-learnwords.herokuapp.com/words?group=${group}&page=${page}`);
   }
 
-
   public getRandomPage(): number {
     let randomPage = Math.floor(Math.random() * (this.lastPage - this.firstPage + 1))
       + this.firstPage;
@@ -40,5 +39,4 @@ export class SprintGameService {
     this.pagesArray.push(randomPage);
     return randomPage;
   }
-
 }
