@@ -18,6 +18,8 @@ export class TextbookComponent implements OnInit {
 
   currentId = '';
 
+  isHardPage: boolean = Boolean(localStorage.getItem('isHard')) || false;
+
   isAuth: boolean = this.authModalService.authenticated;
 
   wordStudiedCount = 0;
@@ -43,6 +45,8 @@ export class TextbookComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isAuth) {
       this.getPage(this.page);
+    } else if (this.isHardPage) {
+      this.changeGroupHard();
     } else {
       this.getAuthPage(this.page, true);
     }
@@ -80,6 +84,8 @@ export class TextbookComponent implements OnInit {
   }
 
   changeGroup(event: Event): void {
+    this.isHardPage = false;
+    localStorage.setItem('isHard', String(this.isHardPage));
     const thisTarget = event.target as HTMLButtonElement;
     this.group = Number(thisTarget.textContent);
     localStorage.setItem('group', String(this.group));
@@ -89,6 +95,20 @@ export class TextbookComponent implements OnInit {
     } else {
       this.getAuthPage(1, true);
     }
+  }
+
+  changeGroupHard(): void {
+    this.isHardPage = true;
+    localStorage.setItem('isHard', String(this.isHardPage));
+    this.loading = true;
+    const userId = this.authModalService.getUserId()!;
+    this.userWordsService.getUserHardWords(userId)
+      .subscribe((response) => {
+        console.log('Response', response);
+        this.words = response;
+        this.page = 1;
+        this.loading = false;
+      });
   }
 
   playAudio(id: string): void {
@@ -112,6 +132,22 @@ export class TextbookComponent implements OnInit {
           });
         });
       });
+    });
+  }
+
+  deleteDifficult(id: string): void {
+    const userId = this.authModalService.getUserId()!;
+    this.userWordsService.getUserWord(userId, id).subscribe((word) => {
+      const obj = {
+        difficulty: 'empty',
+        optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+      };
+
+      this.userWordsService
+        .updateUserWord(userId, id, obj)
+        .subscribe(() => {
+          this.changeGroupHard();
+        });
     });
   }
 

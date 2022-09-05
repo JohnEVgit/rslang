@@ -52,6 +52,14 @@
     &--group6 {
         background-color: var(--color-group-6);
     }
+
+    &--group-hard {
+        background-color: #f1c3fb;
+    }
+
+    &__textbook + .main__games {
+        margin-top: 20px;
+    }
 }
 
 .group {
@@ -107,6 +115,10 @@
 
             &:hover {
                 box-shadow: none;
+            }
+
+            &.group__btn--group-hard {
+                background: rgb(255, 190, 190);
             }
         }
 
@@ -244,7 +256,8 @@
         z-index: 1;
     }
 
-    &__difficult {
+    &__difficult,
+    &__delete {
         position: absolute;
         top: 45px;
         right: 20px;
@@ -263,6 +276,10 @@
         &--is-active {
             color: red;
         }
+    }
+
+    &__delete {
+        color: var(--color-text);
     }
 
     &__learned {
@@ -604,9 +621,20 @@
 }
 
 
+@media screen and (max-width: 400px) {
+    .group__list {
+        gap: 10px;
+    }
+}
+
+
 @media screen and (max-width: 359px) {
     :host ::ng-deep .ngx-pagination {
         gap: 3px;
+    }
+
+    .group__list {
+        gap: 5px;
     }
 }
 

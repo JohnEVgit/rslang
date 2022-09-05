@@ -33,6 +33,16 @@ export class UserWordsService {
       );
   }
 
+  public getUserHardWords(userId: string) {
+    return this.http
+      .get(
+        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=10000&filter={"$and": [{"userWord.difficulty":"hard"}]}`,
+      )
+      .pipe(
+        switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
+      );
+  }
+
   public getUserWord(userId: string, wordId: string) {
     return this.http.get(`https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords/${wordId}`).pipe(
       switchMap((words) => of((words as Array<Word>)[0])),
