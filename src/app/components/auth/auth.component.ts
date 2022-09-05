@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
@@ -65,7 +66,6 @@ export class AuthComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.form.value);
     const loginUser = async (user:{}) => {
       const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/signin', {
         method: 'POST',
@@ -84,6 +84,7 @@ export class AuthComponent implements OnInit {
       if (content.message === 'Authenticated') {
         this.authModalService.authenticated = true;
       }
+      console.log(content);
     };
 
     loginUser(this.form.value).then(() => this.authModalService.close());
@@ -101,8 +102,6 @@ export class AuthComponent implements OnInit {
         body: JSON.stringify(user),
       });
       const content = await rawResponse.json();
-
-      console.log(content);
     };
 
     createUser(this.signup.value).then(() => this.authModalService.close());
