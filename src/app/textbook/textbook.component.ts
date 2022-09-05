@@ -63,7 +63,6 @@ export class TextbookComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     this.http.get<Word[]>(`${this.backendUrl}words?group=${this.group - 1}&page=${page - 1}`).subscribe((response) => {
-      console.log('Response', response);
       this.words = response;
       this.page = page;
       this.loading = false;
@@ -80,7 +79,7 @@ export class TextbookComponent implements OnInit {
     const userId = this.authModalService.getUserId()!;
     this.userWordsService.getUserTextbookWords(userId, this.group - 1, page - 1)
       .subscribe((response) => {
-        console.log('Response', response);
+        this.audioCallGameService.words = response;
         this.words = response;
         this.page = page;
         this.loading = false;

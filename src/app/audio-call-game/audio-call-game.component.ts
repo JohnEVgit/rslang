@@ -44,11 +44,11 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.randomWordsTranslate = [];
     this.startFromBook = false;
     if ((!this.authModalService.authenticated && this.audioCallGameService.startFromBook)
       || (this.authModalService.authenticated && this.audioCallGameService.startFromBook)) {
       this.startFromBook = true;
-      this.randomWordsTranslate = this.getRandomWordTranslate();
       this.getWords(this.audioCallGameService.group, this.audioCallGameService.page);
     }
   }
@@ -68,7 +68,6 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.gameStatus = 'menu';
     this.wordIndex = 0;
     this.wordQuestion = undefined;
-    this.randomWords = [];
     if (this.startFromBook) {
       this.isStartDisabled = false;
     } else {
@@ -77,7 +76,6 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.isAnswerChosen = false;
     this.rightAnswers = [];
     this.wrongAnswers = [];
-    this.ngOnInit();
   }
 
   public addClass(event: MouseEvent) {
@@ -87,8 +85,8 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
   }
 
   public chooseLevel(group: number) {
+    this.audioCallGameService.group = group;
     this.isStartDisabled = true;
-    this.randomWordsTranslate = this.getRandomWordTranslate();
     this.getWords(group);
   }
 
@@ -96,7 +94,8 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     if (!this.authModalService.authenticated) {
       this.audioCallGameService.getWords(group, page)
         .subscribe((words) => {
-          console.log(words);
+          this.randomWords = words;
+          this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
@@ -105,6 +104,8 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserWords(userId, group)
         .subscribe((words) => {
+          this.randomWords = words;
+          this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
@@ -113,18 +114,32 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserTextbookWords(userId, group, page)
         .subscribe((words) => {
+          this.randomWords = words;
+          this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
     }
   }
 
+  private getRandomWordTranslate(): void {
+    this.randomWordsTranslate = [];
+    if (this.authModalService.authenticated && this.audioCallGameService.startFromBook) {
+      this.audioCallGameService.words.forEach((word) => {
+        this.randomWordsTranslate.push(word.wordTranslate);
+      });
+    } else {
+      this.randomWords.forEach((element) => this.randomWordsTranslate.push(element.wordTranslate));
+    }
+  }
+
   private getRandomAnswers(words: Word[]): void {
-    this.randomWords = words;
     words.forEach((_, index) => {
       const randomAnswers: string[] = [];
-      for (let i = randomAnswers.length; i < 4; i += 1) {
-        let randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+      randomAnswers.push(this.randomWords[index].wordTranslate);
+      let randomNum = 0;
+      while (randomAnswers.length < 5) {
+        randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
         while (randomAnswers.includes(this.randomWordsTranslate[randomNum])) {
           randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
         }
@@ -182,21 +197,9 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getRandomWordTranslate(): string[] {
-    const randomWordsTranslate: string[] = [];
-    for (let i = 0; i <= 5; i += 1) {
-      this.audioCallGameService.getWords(i)
-        .subscribe((words) => {
-          words.forEach((element) => randomWordsTranslate.push(element.wordTranslate));
-        });
-    }
-    return randomWordsTranslate;
-  }
-
   private generateQuestion(word: Word[], i: number): void {
     this.wordQuestion = word[i];
     const options = word[i].responseOptions;
-    options?.push(word[i].wordTranslate);
     this.shuffleArray(options!);
     this.wordQuestion.responseOptions = options;
     this.createAudio(this.wordQuestion?.audio);
