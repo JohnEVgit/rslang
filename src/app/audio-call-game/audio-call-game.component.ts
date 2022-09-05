@@ -1,4 +1,6 @@
-import { Component, HostListener} from '@angular/core';
+import {
+  Component, HostListener, OnDestroy, OnInit,
+} from '@angular/core';
 import { Word } from '../data/interfaces';
 import { AudioCallGameService } from '../services/audio-call-game.service';
 import { UserWordsService } from '../services/user-words.service';
@@ -9,7 +11,7 @@ import { AuthModalService } from '../services/auth-modal.service';
   templateUrl: './audio-call-game.component.html',
   styleUrls: ['./audio-call-game.component.scss'],
 })
-export class AudioCallGameComponent {
+export class AudioCallGameComponent implements OnInit, OnDestroy {
   public levels: string[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
   public gameStatus = 'menu';
@@ -32,11 +34,28 @@ export class AudioCallGameComponent {
 
   public wrongAnswers: Word[] = [];
 
+  public startFromBook = false;
+
   constructor(
     private audioCallGameService: AudioCallGameService,
     private userWordsService: UserWordsService,
     private authModalService: AuthModalService,
   ) { }
+
+  ngOnInit(): void {
+    this.startFromBook = false;
+    if ((!this.authModalService.authenticated && this.audioCallGameService.startFromBook)
+      || (this.authModalService.authenticated && this.audioCallGameService.startFromBook)) {
+      this.startFromBook = true;
+      this.randomWordsTranslate = this.getRandomWordTranslate();
+      this.getWords(this.audioCallGameService.group, this.audioCallGameService.page);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.menuGame();
+    this.audioCallGameService.startFromBook = false;
+  }
 
   public playGame(): void {
     this.gameStatus = 'play';
@@ -48,10 +67,16 @@ export class AudioCallGameComponent {
     this.gameStatus = 'menu';
     this.wordIndex = 0;
     this.wordQuestion = undefined;
-    this.isStartDisabled = true;
+    this.randomWords = [];
+    if (this.startFromBook) {
+      this.isStartDisabled = false;
+    } else {
+      this.isStartDisabled = true;
+    }
     this.isAnswerChosen = false;
     this.rightAnswers = [];
     this.wrongAnswers = [];
+    this.ngOnInit();
   }
 
   public addClass(event: MouseEvent) {
@@ -61,20 +86,34 @@ export class AudioCallGameComponent {
   }
 
   public chooseLevel(group: number) {
+    this.isStartDisabled = true;
     this.randomWordsTranslate = this.getRandomWordTranslate();
+    this.getWords(group);
+  }
+
+  private getWords(group: number, page?: number) {
     if (!this.authModalService.authenticated) {
-      this.audioCallGameService.getWords(group)
+      this.audioCallGameService.getWords(group, page)
         .subscribe((words) => {
+          console.log(words);
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
-    } else {
+    }
+    if (this.authModalService.authenticated && !this.audioCallGameService.startFromBook) {
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserWords(userId, group)
         .subscribe((words) => {
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
-          console.log(this.randomWords);
+        });
+    }
+    if (this.authModalService.authenticated && this.audioCallGameService.startFromBook) {
+      const userId = this.authModalService.getUserId()!;
+      this.userWordsService.getUserTextbookWords(userId, group, page)
+        .subscribe((words) => {
+          this.getRandomAnswers(words);
+          this.isStartDisabled = false;
         });
     }
   }

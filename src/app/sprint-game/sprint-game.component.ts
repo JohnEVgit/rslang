@@ -1,4 +1,6 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component, HostListener, OnDestroy, OnInit,
+} from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
@@ -76,8 +78,6 @@ export class SprintGameComponent implements OnInit, OnDestroy {
   private getWords(group: number, page?: number) {
     this.randomWords = [];
     this.wordIndex = 0;
-    console.log(group);
-    console.log(page);
     if (!this.authModalService.authenticated) {
       this.sprintGameService.getWords(group, page)
         .subscribe((words) => {
@@ -86,7 +86,6 @@ export class SprintGameComponent implements OnInit, OnDestroy {
           });
           this.generateQuestion();
           this.isStartDisabled = false;
-          console.log(this.randomWords);
         });
     } else if (this.authModalService.authenticated && !this.sprintGameService.startFromBook) {
       const userId = this.authModalService.getUserId()!;
@@ -99,7 +98,6 @@ export class SprintGameComponent implements OnInit, OnDestroy {
           this.isStartDisabled = false;
         });
     } else if (this.authModalService.authenticated && this.sprintGameService.startFromBook) {
-      console.log('Book');
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserTextbookWords(userId, group, page)
         .subscribe((words) => {

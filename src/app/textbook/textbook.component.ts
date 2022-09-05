@@ -5,6 +5,7 @@ import { Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 import { SprintGameService } from '../services/sprint-game.service';
+import { AudioCallGameService } from '../services/audio-call-game.service';
 
 @Component({
   selector: 'app-textbook',
@@ -41,6 +42,7 @@ export class TextbookComponent implements OnInit {
     private userWordsService: UserWordsService,
     private authModalService: AuthModalService,
     private sprintGameService: SprintGameService,
+    private audioCallGameService: AudioCallGameService,
     private router: Router,
   ) { }
 
@@ -165,5 +167,12 @@ export class TextbookComponent implements OnInit {
     this.sprintGameService.page = this.page - 1;
     this.sprintGameService.group = this.group - 1;
     this.router.navigateByUrl('/sprint-game');
+  }
+
+  public startAudioCallGame() {
+    this.audioCallGameService.startFromBook = true;
+    this.audioCallGameService.page = this.page - 1;
+    this.audioCallGameService.group = this.group - 1;
+    this.router.navigateByUrl('/audio-call-game');
   }
 }

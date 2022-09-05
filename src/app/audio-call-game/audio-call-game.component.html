@@ -1,4 +1,4 @@
-<div class="audio-call" [ngSwitch]="gameStatus">
+<div class="audio-call" [ngClass]="{ 'change-audio-call__play': gameStatus === 'play'}" [ngSwitch]="gameStatus">
   <ng-template ngSwitchCase="menu">
     <h2>Аудиовызов</h2>
     <div class="audio-call-menu">
@@ -10,8 +10,8 @@
         <li class="rules__item">Используйте Escape, чтобы начать игру заново</li>
         <li class="rules__item">Используйте Space для перехода к следующему вопросу</li>
       </ol>
-      <h3>Выберите уровень сложности</h3>
-      <div class="audio-call-menu__levels">
+      <h3 *ngIf="!startFromBook">Выберите уровень сложности</h3>
+      <div *ngIf="!startFromBook" class="audio-call-menu__levels">
         <button class="btn levels__btn"
                 *ngFor="let level of levels; let i = index"
                 (click)="
