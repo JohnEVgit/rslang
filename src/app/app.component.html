@@ -4,7 +4,7 @@
     </div>
     <app-auth *ngIf="authModalService.isVisible$ | async"></app-auth>
     <router-outlet></router-outlet>
-    <div class="page__footer">
+    <div class="page__footer" *ngIf="route !== '/audio-call-game' && route !== '/sprint-game'">
         <app-footer></app-footer>
     </div>
 </div>
