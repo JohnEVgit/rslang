@@ -84,7 +84,6 @@ export class AuthComponent implements OnInit {
       if (content.message === 'Authenticated') {
         this.authModalService.authenticated = true;
       }
-      console.log(content);
     };
 
     loginUser(this.form.value).then(() => this.authModalService.close());

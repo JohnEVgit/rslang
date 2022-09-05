@@ -85,8 +85,6 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
   }
 
   public chooseLevel(group: number) {
-    console.log(group);
-    
     this.audioCallGameService.group = group;
     this.isStartDisabled = true;
     this.getWords(group);
@@ -100,13 +98,14 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
           this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
-          console.log(this.randomWords);
         });
     }
     if (this.authModalService.authenticated && !this.audioCallGameService.startFromBook) {
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserWords(userId, group)
         .subscribe((words) => {
+          this.randomWords = words;
+          this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
@@ -115,6 +114,8 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
       const userId = this.authModalService.getUserId()!;
       this.userWordsService.getUserTextbookWords(userId, group, page)
         .subscribe((words) => {
+          this.randomWords = words;
+          this.getRandomWordTranslate();
           this.getRandomAnswers(words);
           this.isStartDisabled = false;
         });
