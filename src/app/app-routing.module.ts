@@ -4,6 +4,7 @@ import { AudioCallGameComponent } from './audio-call-game/audio-call-game.compon
 import { AuthComponent } from './components/auth/auth.component';
 import { MainComponent } from './main/main.component';
 import { SprintGameComponent } from './sprint-game/sprint-game.component';
+import { StatisticComponent } from './statistic/statistic.component';
 import { TextbookComponent } from './textbook/textbook.component';
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'audio-call-game', component: AudioCallGameComponent },
   { path: 'sprint-game', component: SprintGameComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'statistic', component: StatisticComponent },
 ];
 
 @NgModule({

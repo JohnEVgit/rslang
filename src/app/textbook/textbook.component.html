@@ -1,4 +1,5 @@
 <main class="main main--group{{group}}"
+    [ngClass]="{ 'main--group-hard': isHardPage }"
     [ngClass]="{ 'main--is-done': wordStudiedCount === wordsPerPage }">
     <div class="wrapper">
         <h1 class="main__title">Электронный учебник</h1>
@@ -8,8 +9,17 @@
             <ul class="group__list">
                 <li class="group__item" *ngFor="let n of groupArr">
                     <button class="group__btn group__btn--group{{n}}" type="button"
-                    [ngClass]="{ 'group__btn--is-active': n === group }"
+                    [ngClass]="{ 'group__btn--is-active': !isHardPage && n === group }"
                     (click)="changeGroup($event)">{{n}}</button>
+                </li>
+                <li class="group__item" *ngIf="isAuth">
+                    <button class="group__btn group__btn--group-hard" type="button"
+                        [ngClass]="{ 'group__btn--is-active': isHardPage }"
+                        (click)="changeGroupHard()">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
+                        </svg>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -52,7 +62,7 @@
                     </button>
                     <button class="textbook__difficult" type="button" aria-label="Добавить в сложные слова/убрать из сложных слов"
                     (click)="toggleDifficult(word._id || word.id, 'hard')"
-                    *ngIf="isAuth"
+                    *ngIf="isAuth && !isHardPage"
                     [class.textbook__difficult--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
@@ -60,10 +70,17 @@
                     </button>
                     <button class="textbook__learned" type="button" aria-label="Добавить в изученные/убрать из изученных"
                     (click)="toggleDifficult(word._id || word.id, 'studied')"
-                    *ngIf="isAuth"
+                    *ngIf="isAuth && !isHardPage"
                     [class.textbook__learned--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'studied'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
                             <use href="../../assets/img/sprite.svg#svg-icon-check"></use>
+                        </svg>
+                    </button>
+                    <button class="textbook__delete" type="button" aria-label="Удалить из сложных слов"
+                    (click)="deleteDifficult(word._id || word.id)"
+                    *ngIf="isAuth && isHardPage">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-delete"></use>
                         </svg>
                     </button>
                     <p class="textbook__under">
@@ -84,7 +101,7 @@
             </div>
         </div>
 
-        <div class="pagination" [ngClass]="{ 'hidden': loading }">
+        <div class="pagination" *ngIf="isAuth && !isHardPage" [ngClass]="{ 'hidden': loading }">
             <pagination-controls (pageChange)="isAuth ? getAuthPage($event, true) : getPage($event)" id="server"
             [previousLabel]="'Предыдущая'"
             [nextLabel]="'Следующая'"
@@ -93,7 +110,7 @@
             [screenReaderCurrentLabel]="'Вы на странице'"></pagination-controls>
         </div>
 
-        <div class="games" [ngClass]="{ 'hidden': loading }">
+        <div class="main__games games" [ngClass]="{ 'hidden': loading }">
             <p class="games__title">Тренировать слова в играх</p>
             <div class="games__list">
                 <button class="games__link btn btn--theme-primary" (click)="startAudioCallGame()" [disabled]="wordStudiedCount === wordsPerPage">Аудиовызов</button>

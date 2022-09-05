@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import {
   Component, HostListener, OnDestroy, OnInit,
 } from '@angular/core';

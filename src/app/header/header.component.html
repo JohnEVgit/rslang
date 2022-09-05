@@ -12,19 +12,20 @@
             <div class="nav__shadow" (click)="closeMenu()"></div>
             <ul class="nav__list">
                 <li class="nav__item">
-                    <a class="nav__link" routerLink="/" (click)="closeMenu()">Главная</a>
+                    <a class="nav__link" routerLink="/" routerLinkActive="nav__link--is-active" 
+                    [routerLinkActiveOptions]={exact:true} (click)="closeMenu()">Главная</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" routerLink="/textbook" (click)="closeMenu()">Учебник</a>
+                    <a class="nav__link" routerLink="/textbook" routerLinkActive="nav__link--is-active" (click)="closeMenu()">Учебник</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" routerLink="/audio-call-game" (click)="closeMenu()">Аудиовызов</a>
+                    <a class="nav__link" routerLink="/audio-call-game" routerLinkActive="nav__link--is-active" (click)="closeMenu()">Аудиовызов</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" routerLink="/sprint-game"  (click)="closeMenu()">Спринт</a>
+                    <a class="nav__link" routerLink="/sprint-game" routerLinkActive="nav__link--is-active"  (click)="closeMenu()">Спринт</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" href="#" (click)="closeMenu()">Статистика</a>
+                    <a class="nav__link" routerLink="/statistic" routerLinkActive="nav__link--is-active" (click)="closeMenu()">Статистика</a>
                 </li>
             </ul>
         </nav>

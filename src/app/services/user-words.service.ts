@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -31,6 +32,16 @@ export class UserWordsService {
     return this.http
       .get(
         `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${page}}]}`,
+      )
+      .pipe(
+        switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
+      );
+  }
+
+  public getUserHardWords(userId: string) {
+    return this.http
+      .get(
+        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=10000&filter={"$and": [{"userWord.difficulty":"hard"}]}`,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
