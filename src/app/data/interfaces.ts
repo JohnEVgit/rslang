@@ -1,5 +1,6 @@
 export interface Word {
   id: string;
+  _id: string;
   group: number;
   page: number;
   word: string;
@@ -14,19 +15,12 @@ export interface Word {
   textMeaningTranslate: string;
   textExampleTranslate: string;
   responseOptions?: string[];
-  userWord?: {
-    difficulty?: string;
-    optional?: {
-      rightAnswers?: number;
-      wrongAnswers?: number;
-    };
-  };
-  _id?: string;
+  userWord?: UserWord;
 }
 
 export interface UserWord {
   difficulty: string;
-  optional: {};
+  optional?: Statistic;
 }
 
 export interface WordPage {
@@ -34,7 +28,12 @@ export interface WordPage {
   totalCount: number;
 }
 
+
 export interface Stats {
   learnedWords: number;
   optional: {};
+
+export interface Statistic {
+  rightAnswers?: number;
+  wrongAnswers?: number;
 }

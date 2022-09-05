@@ -11,10 +11,16 @@ export class AudioCallGameService {
 
   private lastPage = 29;
 
+  public page = 0;
+
+  public group = 0;
+
+  public startFromBook = false;
+
   constructor(private http: HttpClient) { }
 
   public getWords(group: number, page?: number | undefined): Observable<Word[]> {
-    if (!page) {
+    if (page === undefined) {
       const randomPage = Math.floor(Math.random() * (this.lastPage - this.firstPage + 1))
        + this.firstPage;
       return this.http.get<Word[]>(`https://angular-learnwords.herokuapp.com/words?group=${group}&page=${randomPage}`);

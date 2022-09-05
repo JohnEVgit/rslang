@@ -96,8 +96,8 @@
         <div class="games" [ngClass]="{ 'hidden': loading }">
             <p class="games__title">Тренировать слова в играх</p>
             <div class="games__list">
-                <button class="games__link btn btn--theme-primary" routerLink="/audio-call-game" [disabled]="wordStudiedCount === wordsPerPage">Аудиовызов</button>
-                <button class="games__link btn btn--theme-primary" routerLink="/sprint-game" [disabled]="wordStudiedCount === wordsPerPage">Спринт</button>
+                <button class="games__link btn btn--theme-primary" (click)="startAudioCallGame()" [disabled]="wordStudiedCount === wordsPerPage">Аудиовызов</button>
+                <button class="games__link btn btn--theme-primary" (click)="startSprintGame()" [disabled]="wordStudiedCount === wordsPerPage">Спринт</button>
             </div>
         </div>
     </div>
