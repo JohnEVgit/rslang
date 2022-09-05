@@ -1,6 +1,6 @@
 <div class="page">
     <div class="page__header">
-        <app-header (toggleMenuEvent)="openMenu($event)"></app-header>
+        <app-header></app-header>
     </div>
     <app-auth *ngIf="authModalService.isVisible$ | async"></app-auth>
     <router-outlet></router-outlet>

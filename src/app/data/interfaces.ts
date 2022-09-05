@@ -16,11 +16,20 @@ export interface Word {
   responseOptions?: string[];
   userWord?: {
     difficulty?: string;
-    optional?: {};
+    optional?: {
+      rightAnswers?: number;
+      wrongAnswers?: number;
+    };
   };
+  _id?: string;
 }
 
 export interface UserWord {
   difficulty: string;
   optional: {};
+}
+
+export interface WordPage {
+  paginatedResults: Word[];
+  totalCount: number;
 }

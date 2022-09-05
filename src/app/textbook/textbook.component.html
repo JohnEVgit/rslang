@@ -1,0 +1,104 @@
+<main class="main main--group{{group}}"
+    [ngClass]="{ 'main--is-done': wordStudiedCount === wordsPerPage }">
+    <div class="wrapper">
+        <h1 class="main__title">Электронный учебник</h1>
+
+        <div class="main__group group">
+            <p class="group__title">Выберите раздел:</p>
+            <ul class="group__list">
+                <li class="group__item" *ngFor="let n of groupArr">
+                    <button class="group__btn group__btn--group{{n}}" type="button"
+                    [ngClass]="{ 'group__btn--is-active': n === group }"
+                    (click)="changeGroup($event)">{{n}}</button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="spinner" [ngClass]="{ 'hidden': !loading }">
+            <div class="spinner__elem"></div>
+        </div>
+
+        <div class="main__textbook textbook">
+            <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: wordsPerPage, currentPage: page, totalItems: total }; index as i">
+                <div class="textbook__picture">
+                    <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
+                    <div class="textbook__progress" *ngIf="isAuth && word.userWord">
+                        <div class="textbook__correct">
+                            <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
+                                <use href="../../assets/img/sprite.svg#svg-icon-check2"></use>
+                            </svg>
+                            <span class="textbook__count">{{word.userWord.optional?.rightAnswers}}</span>
+                        </div>
+                        <div class="textbook__incorrect">
+                            <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
+                                <use href="../../assets/img/sprite.svg#svg-icon-close"></use>
+                            </svg>
+                            <span class="textbook__count">{{word.userWord.optional?.wrongAnswers}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="textbook__info"
+                    [class.textbook__info--is-learned]="isAuth && word.userWord && word.userWord.difficulty === 'studied'"
+                    [class.textbook__info--is-difficult]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
+                    <h2 class="textbook__name">{{word.word}}</h2>
+                    <button class="textbook__audio" type="button" aria-label="Проиграть аудио"
+                    (click)="playAudio(word._id || word.id)"
+                    [class.textbook__audio--is-active]="isPlayAudio && (currentId === word._id || currentId === word.id)"
+                    [disabled]="isPlayAudio"
+                    >
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
+                        </svg>
+                    </button>
+                    <button class="textbook__difficult" type="button" aria-label="Добавить в сложные слова/убрать из сложных слов"
+                    (click)="toggleDifficult(word._id || word.id, 'hard')"
+                    *ngIf="isAuth"
+                    [class.textbook__difficult--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
+                        </svg>
+                    </button>
+                    <button class="textbook__learned" type="button" aria-label="Добавить в изученные/убрать из изученных"
+                    (click)="toggleDifficult(word._id || word.id, 'studied')"
+                    *ngIf="isAuth"
+                    [class.textbook__learned--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'studied'">
+                        <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
+                            <use href="../../assets/img/sprite.svg#svg-icon-check"></use>
+                        </svg>
+                    </button>
+                    <p class="textbook__under">
+                        <span class="textbook__transcription">{{word.transcription}}</span>
+                        <span class="textbook__translation">{{word.wordTranslate}}</span>
+                    </p>
+                    <div class="textbook__description">
+                        <p class="textbook__label">Значение</p>
+                        <p class="textbook__meaning" [innerHtml]="word.textMeaning"></p>
+                        <p class="textbook__meaning">{{word.textMeaningTranslate}}</p>
+                    </div>
+                    <div class="textbook__description">
+                        <p class="textbook__label">Пример</p>
+                        <p class="textbook__example" [innerHtml]="word.textExample"></p>
+                        <p class="textbook__example">{{word.textExampleTranslate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination" [ngClass]="{ 'hidden': loading }">
+            <pagination-controls (pageChange)="isAuth ? getAuthPage($event, true) : getPage($event)" id="server"
+            [previousLabel]="'Предыдущая'"
+            [nextLabel]="'Следующая'"
+            [screenReaderPaginationLabel]="'Пагинация'"
+            [screenReaderPageLabel]="'Страница'"
+            [screenReaderCurrentLabel]="'Вы на странице'"></pagination-controls>
+        </div>
+
+        <div class="games" [ngClass]="{ 'hidden': loading }">
+            <p class="games__title">Тренировать слова в играх</p>
+            <div class="games__list">
+                <button class="games__link btn btn--theme-primary" routerLink="/audio-call-game" [disabled]="wordStudiedCount === wordsPerPage">Аудиовызов</button>
+                <button class="games__link btn btn--theme-primary" routerLink="/sprint-game" [disabled]="wordStudiedCount === wordsPerPage">Спринт</button>
+            </div>
+        </div>
+    </div>
+</main>

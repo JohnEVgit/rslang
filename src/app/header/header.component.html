@@ -6,16 +6,16 @@
             [class.toggle-nav--is-active]="isOpenMenu">
             <span class="toggle-nav__inner"></span>
         </button>
-        <a class="header__logo" href="/" (click)="closeMenu()">RSLang</a>
+        <a class="header__logo" routerLink="/" (click)="closeMenu()">RSLang</a>
         <nav class="header__nav nav"
         [class.nav--is-active]="isOpenMenu">
             <div class="nav__shadow" (click)="closeMenu()"></div>
             <ul class="nav__list">
                 <li class="nav__item">
-                    <a class="nav__link" routerLink="/"(click)="closeMenu()">Главная</a>
+                    <a class="nav__link" routerLink="/" (click)="closeMenu()">Главная</a>
                 </li>
                 <li class="nav__item">
-                    <a class="nav__link" href="#" (click)="closeMenu()">Учебник</a>
+                    <a class="nav__link" routerLink="/textbook" (click)="closeMenu()">Учебник</a>
                 </li>
                 <li class="nav__item">
                     <a class="nav__link" routerLink="/audio-call-game" (click)="closeMenu()">Аудиовызов</a>
