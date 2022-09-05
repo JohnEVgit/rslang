@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
-import { UserWord, Word } from '../data/interfaces';
+import { Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 
@@ -112,7 +112,7 @@ export class SprintGameComponent implements OnDestroy {
   }
 
   public playGame(): void {
-    this.time = 5;
+    this.time = 30;
     this.gameStatus = 'play';
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
@@ -120,7 +120,7 @@ export class SprintGameComponent implements OnDestroy {
         this.gameStatus = 'end';
         this.rightAnswersPercent = Math.floor(
           (this.rightAnswers.length / (this.rightAnswers.length + this.wrongAnswers.length)) * 100,
-        );
+        ) || 0;
       }
     });
   }
@@ -156,7 +156,7 @@ export class SprintGameComponent implements OnDestroy {
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
       if (this.authModalService.authenticated) {
-        this.createDifficulty('studied', true);
+        this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'studied', true);
       }
       if (this.currentStreak === 3) {
         this.currentStreak = 0;
@@ -170,47 +170,11 @@ export class SprintGameComponent implements OnDestroy {
       this.scorePoints = 10;
       this.wrongAnswers.push(word);
       if (this.authModalService.authenticated) {
-        this.createDifficulty('hard', false);
+        this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'hard', false);
       }
     }
     this.wordIndex += 1;
     this.nextQuestion();
-  }
-
-  private createDifficulty(difficulty: string, isRight: boolean) {
-    const userId = this.authModalService.getUserId()!;
-    let wrongAnswers = 0;
-    let rightAnswers = 0;
-    let obj: UserWord = {
-      difficulty,
-      optional: { rightAnswers: isRight ? 1 : 0, wrongAnswers: !isRight ? 1 : 0 },
-    };
-    if ((this.randomWords[this.wordIndex] as Word)
-      .userWord?.optional) {
-      rightAnswers = (this.randomWords[this.wordIndex] as Word)
-        .userWord?.optional?.rightAnswers!;
-      wrongAnswers = (this.randomWords[this.wordIndex] as Word)
-        .userWord?.optional?.wrongAnswers!;
-      if (isRight) {
-        rightAnswers += 1;
-      } else {
-        wrongAnswers += 1;
-      }
-      obj = {
-        difficulty,
-        optional: { rightAnswers, wrongAnswers },
-      };
-    }
-
-    if ((this.randomWords[this.wordIndex] as Word).userWord?.difficulty) {
-      this.userWordsService
-        .updateUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
-        .subscribe(() => {});
-    } else {
-      this.userWordsService
-        .createUserWord(userId, (this.randomWords[this.wordIndex])._id, obj)
-        .subscribe(() => {});
-    }
   }
 
   public createAudio(audioPath: string | undefined, isWordAudio?: boolean): void {
