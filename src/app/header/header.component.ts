@@ -9,24 +9,18 @@ import { AuthModalService } from '../services/auth-modal.service';
   styleUrls: ['./header.component.scss'],
 })
 
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   @Output() toggleMenuEvent = new EventEmitter<boolean>();
 
   constructor(public authModalService: AuthModalService) {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authModalService.checkAuthenticated();
   }
 
   public visibility = false;
-
-  logoutVis() {
-    if (localStorage.length > 0) {
-      this.visibility = true;
-    }
-  }
 
   isOpenMenu = false;
 

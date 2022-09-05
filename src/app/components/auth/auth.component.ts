@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { HeaderComponent } from 'src/app/header/header.component';
 import { AuthModalService } from 'src/app/services/auth-modal.service';
 
 @Component({
@@ -87,7 +86,7 @@ export class AuthComponent implements OnInit {
       }
     };
 
-    loginUser(this.form.value).then(() => this.authModalService.close()).then(() => HeaderComponent.prototype.logoutVis());
+    loginUser(this.form.value).then(() => this.authModalService.close());
   }
 
   submitS() {
