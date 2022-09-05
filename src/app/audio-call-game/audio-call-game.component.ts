@@ -1,13 +1,17 @@
-import {Component, HostListener} from '@angular/core';
+import {
+  Component, HostListener, OnDestroy, OnInit,
+} from '@angular/core';
 import { Word } from '../data/interfaces';
 import { AudioCallGameService } from '../services/audio-call-game.service';
+import { UserWordsService } from '../services/user-words.service';
+import { AuthModalService } from '../services/auth-modal.service';
 
 @Component({
   selector: 'app-audio-call-game',
   templateUrl: './audio-call-game.component.html',
   styleUrls: ['./audio-call-game.component.scss'],
 })
-export class AudioCallGameComponent {
+export class AudioCallGameComponent implements OnInit, OnDestroy {
   public levels: string[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
   public gameStatus = 'menu';
@@ -22,7 +26,7 @@ export class AudioCallGameComponent {
 
   public randomWords: Word[] = [];
 
-  public wordsPage: number = 0;
+  public wordIndex: number = 0;
 
   public wordQuestion: Word | undefined;
 
@@ -30,22 +34,49 @@ export class AudioCallGameComponent {
 
   public wrongAnswers: Word[] = [];
 
-  constructor(private audioCallGameService: AudioCallGameService) { }
+  public startFromBook = false;
+
+  constructor(
+    private audioCallGameService: AudioCallGameService,
+    private userWordsService: UserWordsService,
+    private authModalService: AuthModalService,
+  ) { }
+
+  ngOnInit(): void {
+    this.startFromBook = false;
+    if ((!this.authModalService.authenticated && this.audioCallGameService.startFromBook)
+      || (this.authModalService.authenticated && this.audioCallGameService.startFromBook)) {
+      this.startFromBook = true;
+      this.randomWordsTranslate = this.getRandomWordTranslate();
+      this.getWords(this.audioCallGameService.group, this.audioCallGameService.page);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.menuGame();
+    this.audioCallGameService.startFromBook = false;
+  }
 
   public playGame(): void {
     this.gameStatus = 'play';
     this.isAnswerChosen = false;
-    this.generateQuestion(this.randomWords, this.wordsPage);
+    this.generateQuestion(this.randomWords, this.wordIndex);
   }
 
   public menuGame() {
     this.gameStatus = 'menu';
-    this.wordsPage = 0;
+    this.wordIndex = 0;
     this.wordQuestion = undefined;
-    this.isStartDisabled = true;
+    this.randomWords = [];
+    if (this.startFromBook) {
+      this.isStartDisabled = false;
+    } else {
+      this.isStartDisabled = true;
+    }
     this.isAnswerChosen = false;
     this.rightAnswers = [];
     this.wrongAnswers = [];
+    this.ngOnInit();
   }
 
   public addClass(event: MouseEvent) {
@@ -55,23 +86,51 @@ export class AudioCallGameComponent {
   }
 
   public chooseLevel(group: number) {
+    this.isStartDisabled = true;
     this.randomWordsTranslate = this.getRandomWordTranslate();
-    this.audioCallGameService.getWords(group)
-      .subscribe((words) => {
-        this.randomWords = words;
-        words.forEach((_, index) => {
-          const randomAnswers: string[] = [];
-          for (let i = randomAnswers.length; i < 4; i += 1) {
-            let randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
-            while (randomAnswers.includes(this.randomWordsTranslate[randomNum])) {
-              randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
-            }
-            randomAnswers.push(this.randomWordsTranslate[randomNum]);
-          }
-          this.randomWords[index].responseOptions = randomAnswers;
+    this.getWords(group);
+  }
+
+  private getWords(group: number, page?: number) {
+    if (!this.authModalService.authenticated) {
+      this.audioCallGameService.getWords(group, page)
+        .subscribe((words) => {
+          console.log(words);
+          this.getRandomAnswers(words);
+          this.isStartDisabled = false;
         });
-        this.isStartDisabled = false;
-      });
+    }
+    if (this.authModalService.authenticated && !this.audioCallGameService.startFromBook) {
+      const userId = this.authModalService.getUserId()!;
+      this.userWordsService.getUserWords(userId, group)
+        .subscribe((words) => {
+          this.getRandomAnswers(words);
+          this.isStartDisabled = false;
+        });
+    }
+    if (this.authModalService.authenticated && this.audioCallGameService.startFromBook) {
+      const userId = this.authModalService.getUserId()!;
+      this.userWordsService.getUserTextbookWords(userId, group, page)
+        .subscribe((words) => {
+          this.getRandomAnswers(words);
+          this.isStartDisabled = false;
+        });
+    }
+  }
+
+  private getRandomAnswers(words: Word[]): void {
+    this.randomWords = words;
+    words.forEach((_, index) => {
+      const randomAnswers: string[] = [];
+      for (let i = randomAnswers.length; i < 4; i += 1) {
+        let randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+        while (randomAnswers.includes(this.randomWordsTranslate[randomNum])) {
+          randomNum = Math.floor(Math.random() * (this.randomWordsTranslate.length));
+        }
+        randomAnswers.push(this.randomWordsTranslate[randomNum]);
+      }
+      this.randomWords[index].responseOptions = randomAnswers;
+    });
   }
 
   public nextQuestion() {
@@ -80,11 +139,11 @@ export class AudioCallGameComponent {
       elem.classList.remove('right');
       elem.classList.remove('wrong');
     });
-    if (this.wordsPage < this.randomWords.length - 1) {
-      this.wordsPage += 1;
-      this.generateQuestion(this.randomWords, this.wordsPage);
+    if (this.wordIndex < this.randomWords.length - 1) {
+      this.wordIndex += 1;
+      this.generateQuestion(this.randomWords, this.wordIndex);
     } else {
-      this.wordsPage = 0;
+      this.wordIndex = 0;
       this.gameStatus = 'end';
     }
   }
@@ -93,10 +152,16 @@ export class AudioCallGameComponent {
     if (word === this.wordQuestion?.wordTranslate) {
       (<HTMLElement>event.target).classList.add('right');
       this.rightAnswers.push(this.wordQuestion);
+      if (this.authModalService.authenticated) {
+        this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'studied', true);
+      }
     } else {
       (<HTMLElement>event.target).classList.add('wrong');
       if (this.wordQuestion) {
         this.wrongAnswers.push(this.wordQuestion);
+      }
+      if (this.authModalService.authenticated) {
+        this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'hard', false);
       }
       document.querySelectorAll('.answer__btn').forEach((elem) => {
         if (elem.textContent === this.wordQuestion?.wordTranslate) {
@@ -175,10 +240,16 @@ export class AudioCallGameComponent {
       if ((elem.textContent === word) && (elem.textContent === this.wordQuestion?.wordTranslate)) {
         elem.classList.add('right');
         this.rightAnswers.push(this.wordQuestion);
+        if (this.authModalService.authenticated) {
+          this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'studied', true);
+        }
       }
       if ((elem.textContent === word) && (elem.textContent !== this.wordQuestion?.wordTranslate)) {
         elem.classList.add('wrong');
         this.wrongAnswers.push(this.wordQuestion!);
+        if (this.authModalService.authenticated) {
+          this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'hard', false);
+        }
       } else if (elem.textContent === this.wordQuestion?.wordTranslate) {
         elem.classList.add('right');
       }

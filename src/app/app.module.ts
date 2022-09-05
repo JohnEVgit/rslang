@@ -14,6 +14,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { AudioCallGameComponent } from './audio-call-game/audio-call-game.component';
 import { SprintGameComponent } from './sprint-game/sprint-game.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     HttpClientModule,
     MatIconModule,
     NgxPaginationModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {

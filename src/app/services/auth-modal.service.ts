@@ -28,17 +28,15 @@ export class AuthModalService {
     }
   }
 
-  public checkAuthenticated() {
-    this.authenticated = !!localStorage.length;
-  }
-
-  constructor() { }
-
   public getToken() {
     return this.local.getItem('JWT');
   }
 
   public getUserId() {
     return this.local.getItem('ID');
+  }
+
+  public checkAuthenticated() {
+    this.authenticated = !!this.local.getItem('JWT');
   }
 }

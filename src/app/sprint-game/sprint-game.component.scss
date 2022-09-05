@@ -156,10 +156,24 @@
   height: 100%;
   overflow-y: scroll;
 
+  .sprint__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .percent {
+      position: relative;
+      bottom: 65px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+
   .sprint__statistics {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
 
     .sprint__right-answers, .sprint__wrong-answers {
       display: flex;
@@ -200,6 +214,6 @@
 }
 
 .change-sprint__end {
-  max-width: 600px;
+  max-width: 620px;
   height: 600px;
 }
