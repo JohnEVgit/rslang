@@ -37,6 +37,6 @@ export class AuthModalService {
   }
 
   public checkAuthenticated() {
-    this.authenticated = !!localStorage.length;
+    this.authenticated = !!this.local.getItem('JWT');
   }
 }

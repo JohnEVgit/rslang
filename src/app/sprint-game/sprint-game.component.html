@@ -8,8 +8,8 @@
         <li class="rules__item">Используйте клавиши влево и вправо</li>
         <li class="rules__item">Используйте Escape чтобы начать заново</li>
       </ol>
-      <h3>Выберите уровень сложности</h3>
-      <div class="sprint-menu__levels">
+      <h3 *ngIf="!startFromBook">Выберите уровень сложности</h3>
+      <div *ngIf="!startFromBook" class="sprint-menu__levels">
         <button class="btn levels__btn"
                 *ngFor="let level of levels; let i = index"
                 (click)="

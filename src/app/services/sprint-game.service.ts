@@ -11,12 +11,18 @@ export class SprintGameService {
 
   private lastPage = 29;
 
+  public startFromBook = false;
+
+  public page = 0;
+
+  public group = 0;
+
   public pagesArray: number[] = [];
 
   constructor(private http: HttpClient) { }
 
-  public getWords(group: number, page?: number | undefined): Observable<Word[]> {
-    if (!page) {
+  public getWords(group: number, page?: number): Observable<Word[]> {
+    if (page === undefined) {
       const randomPage = this.getRandomPage();
       return this.http.get<Word[]>(`https://angular-learnwords.herokuapp.com/words?group=${group}&page=${randomPage}`);
     }

@@ -9,7 +9,11 @@ import { AuthModalService } from './auth-modal.service';
   providedIn: 'root',
 })
 export class UserWordsService {
-  constructor(private http: HttpClient, private sprintGameService: SprintGameService, private authModalService: AuthModalService) { }
+  constructor(
+    private http: HttpClient,
+    private sprintGameService: SprintGameService,
+    private authModalService: AuthModalService,
+  ) { }
 
   public createUserWord(userId: string, wordId: string, obj: UserWord) {
     return this.http.post(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
@@ -23,7 +27,7 @@ export class UserWordsService {
     return this.http.put(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
   }
 
-  public getUserTextbookWords(userId: string, group: number, page: number) {
+  public getUserTextbookWords(userId: string, group: number, page?: number) {
     return this.http
       .get(
         `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${page}}]}`,
@@ -46,7 +50,7 @@ export class UserWordsService {
     }
     return this.http
       .get(
-        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${0}}]}`,
+        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
+import { SprintGameService } from '../services/sprint-game.service';
 
 @Component({
   selector: 'app-textbook',
@@ -38,6 +40,8 @@ export class TextbookComponent implements OnInit {
     private http: HttpClient,
     private userWordsService: UserWordsService,
     private authModalService: AuthModalService,
+    private sprintGameService: SprintGameService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -154,5 +158,12 @@ export class TextbookComponent implements OnInit {
           });
       }
     });
+  }
+
+  public startSprintGame() {
+    this.sprintGameService.startFromBook = true;
+    this.sprintGameService.page = this.page - 1;
+    this.sprintGameService.group = this.group - 1;
+    this.router.navigateByUrl('/sprint-game');
   }
 }

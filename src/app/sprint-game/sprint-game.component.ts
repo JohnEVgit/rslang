@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { SprintGameService } from '../services/sprint-game.service';
 import { Word } from '../data/interfaces';
@@ -10,7 +10,7 @@ import { AuthModalService } from '../services/auth-modal.service';
   templateUrl: './sprint-game.component.html',
   styleUrls: ['./sprint-game.component.scss'],
 })
-export class SprintGameComponent implements OnDestroy {
+export class SprintGameComponent implements OnInit, OnDestroy {
   public levels: string[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
   public gameStatus = 'menu';
@@ -24,8 +24,6 @@ export class SprintGameComponent implements OnDestroy {
   private wordIndex = 0;
 
   private wordTranslateIndex = 0;
-
-  private group = 0;
 
   public word = '';
 
@@ -47,27 +45,52 @@ export class SprintGameComponent implements OnDestroy {
 
   public rightAnswersPercent = 0;
 
+  public startFromBook = false;
+
   constructor(
     private sprintGameService: SprintGameService,
     private userWordsService: UserWordsService,
     private authModalService: AuthModalService,
   ) {}
 
+  ngOnInit(): void {
+    this.startFromBook = false;
+    if ((!this.authModalService.authenticated && this.sprintGameService.startFromBook)
+      || (this.authModalService.authenticated && this.sprintGameService.startFromBook)) {
+      this.startFromBook = true;
+      this.getWords(this.sprintGameService.group, this.sprintGameService.page);
+    }
+  }
+
   ngOnDestroy(): void {
     this.menuGame();
+    this.sprintGameService.startFromBook = false;
   }
 
   public chooseLevel(group: number) {
-    this.group = group;
+    this.sprintGameService.group = group;
     this.sprintGameService.pagesArray = [];
-    this.getWords(this.group);
+    this.getWords(this.sprintGameService.group);
   }
 
-  private getWords(group: number) {
+  private getWords(group: number, page?: number) {
     this.randomWords = [];
     this.wordIndex = 0;
+    console.log(group);
+    console.log(page);
     if (!this.authModalService.authenticated) {
-      this.sprintGameService.getWords(group)
+      this.sprintGameService.getWords(group, page)
+        .subscribe((words) => {
+          words.forEach((word) => {
+            this.randomWords.push(word);
+          });
+          this.generateQuestion();
+          this.isStartDisabled = false;
+          console.log(this.randomWords);
+        });
+    } else if (this.authModalService.authenticated && !this.sprintGameService.startFromBook) {
+      const userId = this.authModalService.getUserId()!;
+      this.userWordsService.getUserWords(userId, group)
         .subscribe((words) => {
           words.forEach((word) => {
             this.randomWords.push(word);
@@ -75,9 +98,10 @@ export class SprintGameComponent implements OnDestroy {
           this.generateQuestion();
           this.isStartDisabled = false;
         });
-    } else {
+    } else if (this.authModalService.authenticated && this.sprintGameService.startFromBook) {
+      console.log('Book');
       const userId = this.authModalService.getUserId()!;
-      this.userWordsService.getUserWords(userId, group)
+      this.userWordsService.getUserTextbookWords(userId, group, page)
         .subscribe((words) => {
           words.forEach((word) => {
             this.randomWords.push(word);
@@ -129,13 +153,17 @@ export class SprintGameComponent implements OnDestroy {
     if (this.wordIndex !== this.randomWords.length) {
       this.generateQuestion();
     } else {
-      this.getWords(this.group);
+      this.getWords(this.sprintGameService.group);
     }
   }
 
   public menuGame(): void {
     this.gameStatus = 'menu';
-    this.isStartDisabled = true;
+    if (this.startFromBook) {
+      this.isStartDisabled = false;
+    } else {
+      this.isStartDisabled = true;
+    }
     this.randomWords = [];
     this.wordIndex = 0;
     this.timer.next(0);
@@ -145,6 +173,7 @@ export class SprintGameComponent implements OnDestroy {
     this.rightAnswers = [];
     this.wrongAnswers = [];
     this.sprintGameService.pagesArray = [];
+    this.ngOnInit();
   }
 
   public checkAnswer(isRight: boolean) {
