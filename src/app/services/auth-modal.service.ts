@@ -39,4 +39,5 @@ export class AuthModalService {
   public checkAuthenticated() {
     this.authenticated = !!this.local.getItem('JWT');
   }
+
 }

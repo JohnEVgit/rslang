@@ -7,7 +7,6 @@ import { AuthModalService } from '../services/auth-modal.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
   constructor(private authModalService: AuthModalService) {
   }
 

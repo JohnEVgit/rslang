@@ -28,6 +28,11 @@ export interface WordPage {
   totalCount: number;
 }
 
+
+export interface Stats {
+  learnedWords: number;
+  optional: {};
+
 export interface Statistic {
   rightAnswers?: number;
   wrongAnswers?: number;

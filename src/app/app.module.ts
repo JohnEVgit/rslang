@@ -14,7 +14,9 @@ import { AuthComponent } from './components/auth/auth.component';
 import { AudioCallGameComponent } from './audio-call-game/audio-call-game.component';
 import { SprintGameComponent } from './sprint-game/sprint-game.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { StatisticComponent } from './statistic/statistic.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AuthComponent,
     AudioCallGameComponent,
     SprintGameComponent,
+    StatisticComponent,
   ],
   imports: [
     BrowserModule,
