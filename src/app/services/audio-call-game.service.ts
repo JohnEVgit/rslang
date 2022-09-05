@@ -17,6 +17,8 @@ export class AudioCallGameService {
 
   public startFromBook = false;
 
+  public words: Word[] = [];
+
   constructor(private http: HttpClient) { }
 
   public getWords(group: number, page?: number | undefined): Observable<Word[]> {

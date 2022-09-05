@@ -77,6 +77,7 @@ export class TextbookComponent implements OnInit {
     this.userWordsService.getUserTextbookWords(userId, this.group - 1, page - 1)
       .subscribe((response) => {
         console.log('Response', response);
+        this.audioCallGameService.words = response;
         this.words = response;
         this.page = page;
         this.loading = false;
