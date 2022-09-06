@@ -18,6 +18,14 @@
         text-align: center;
         margin-top: 0;
         margin-bottom: 0;
+
+        &--request {
+            color: #3434b9;
+        }
+
+        &--link {
+            color: red;
+        }
     }
 
     &__team {
