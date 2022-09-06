@@ -233,6 +233,10 @@
         
         &__title {
             font-size: 22px;
+            
+            &--request {
+                font-size: 20px;
+            }
         }
     }
 
@@ -270,6 +274,10 @@
         
         &__title {
             font-size: 19px;
+                        
+            &--request {
+                font-size: 16px;
+            }
         }
     }
 
@@ -326,6 +334,16 @@
         &__name {
             font-size: 15px;
             margin-bottom: 6px;
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .main {
+        &__title {                    
+            &--request {
+                font-size: 13px;
+            }
         }
     }
 }
