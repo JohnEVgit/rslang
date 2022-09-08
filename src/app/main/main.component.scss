@@ -1,0 +1,349 @@
+.main {
+    width: 100%;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    flex: 1 0 auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 66px;
+
+    .wrapper {
+        max-width: 1400px;
+    }
+
+    &__title {
+        font-size: 32px;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        &--request {
+            color: #3434b9;
+        }
+
+        &--link {
+            color: red;
+        }
+    }
+
+    &__team {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.main-advantages {
+    &__title {
+        margin-top: 0;
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    &__cont {
+        display: flex;
+        align-items: center;
+    }
+
+    &__info {
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+
+    &__svg {
+        width: 30%;
+        min-width: 30%;
+        height: auto;
+        margin-right: 10%;
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        gap: 16px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__item {
+        position: relative;
+        font-size: 20px;
+        line-height: 24px;
+        padding-left: 46px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            top: -4px;
+            left: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='tomato' viewBox='0 0 24 24'%3E%3Cpath d='m5 10.41-1.3 1.3a1 1 0 1 1-1.4-1.42l2-2a1 1 0 0 1 1.4 0l3.44 3.44 10.32-6.57a1 1 0 0 1 1.25.13l1 1a1 1 0 0 1-.03 1.45l-12 11a1 1 0 0 1-1.44-.09l-3.31-3.87a1 1 0 0 1 1.51-1.3l2.65 3.08 8.68-7.96-8.23 5.24a1 1 0 0 1-1.25-.13L5 10.4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    }
+}
+
+.main-team {
+    &__title {
+        text-align: center;
+        font-size: 24px;
+    }
+
+    &__elem {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        border-radius: 80px;
+        background: linear-gradient(to right, white, rgba(255,255,255,0));
+        overflow: hidden;
+
+        &:nth-child(2n) {
+            flex-direction: row-reverse;
+            text-align: right;
+            background: linear-gradient(to left, white, rgba(255,255,255,0));
+                
+            .main-team__name {
+                flex-direction: row-reverse;
+            }
+        }
+
+    }
+
+    &__picture {
+        width: 160px;
+        min-width: 160px;
+        min-height: 160px;
+        background-color: var(--color-bg-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+        align-self: stretch;
+    }
+
+    &__info {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    &__name {
+        display: flex;
+        margin: 0 0 16px;
+        gap: 12px;
+        font-size: 20px;
+    }
+
+    &__github {
+        display: flex;
+        align-items: center;
+        color: var(--color-text);
+        text-decoration: none;
+        transition: color 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            color: var(--color-main);
+        }
+    }
+
+    &__svg {
+        display: block;
+    }
+
+    &__description {
+        font-size: 18px;
+        margin: 0;
+    }
+}
+
+
+@media screen and (max-width: 1024px) {
+    .main {
+        padding-top: 32px;
+        padding-bottom: 32px;
+
+        &__title {
+            font-size: 25px;
+        }
+    }
+
+    .main-advantages {
+        &__svg {
+            width: 25%;
+            min-width: 25%;
+            margin-right: 5%;
+        }
+
+        &__title {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        &__list {
+            gap: 8px;
+        }
+
+        &__item {
+            font-size: 18px;
+        }
+    }
+
+    .main-team {
+        &__title {
+            font-size: 20px;
+        }
+
+        &__elem {
+            gap: 40px;
+            border-radius: 80px;
+        }
+    
+        &__picture {
+            width: 140px;
+            min-width: 140px;
+            min-height: 140px;
+        }
+
+        &__img {
+            width: 70px;
+            height: 70px;
+        }
+    
+        &__name {
+            gap: 10px;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        &__description {
+            font-size: 16px;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        margin-top: 48px;
+        
+        &__title {
+            font-size: 22px;
+            
+            &--request {
+                font-size: 20px;
+            }
+        }
+    }
+
+    .main-advantages {
+        &__title {
+            font-size: 18px;
+        }
+
+        &__item {
+            font-size: 16px;
+            line-height: 20px;
+
+            &::before {
+                top: -6px;
+            }
+        }
+    }
+
+    .main-team {
+        &__description {
+            font-size: 15px;
+        }
+
+        &__name {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        
+        &__title {
+            font-size: 19px;
+                        
+            &--request {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .main-advantages {
+        position: relative;
+        z-index: 0;
+
+        &__title {
+            font-size: 17px;
+            text-align: center;
+        }
+
+        &__svg {
+            position: absolute;
+            opacity: 0.1;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            height: 100%;
+            width: auto;
+            z-index: -1;
+        }
+
+        &__item {
+            font-size: 15px;
+        }
+    }
+
+    .main-team {
+        &__title {
+            font-size: 17px;
+        }
+
+        &__picture {
+            width: 90px;
+            min-width: 90px;
+            min-height: 90px;
+        }
+        
+        &__img {
+            width: 50px;
+            height: 50px;
+        }
+
+        &__elem {
+            gap: 12px;
+        }
+
+        &__description {
+            font-size: 14px;
+        }
+
+        &__name {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .main {
+        &__title {                    
+            &--request {
+                font-size: 13px;
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+<div class="shadow" (click)="authModalService.close()"></div>
+
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form class="left" action="#" action="#" [formGroup]="form" (ngSubmit)='submit()'>
+			<h1>Войти</h1>
+			<span>использовать свой аккаунт</span>
+			<input type="email" placeholder="Email" formControlName="email" />
+            <span class="alert" *ngIf="email.errors?.['minlength'] && email.touched ">Слишком короткий адрес. Сейчас {{ email.value.length }}</span>
+			<input type="password" placeholder="Password" formControlName="password" />
+            <span class="alert" *ngIf="password.errors?.['minlength'] && password.touched ">Слишком короткий пароль. Сейчас {{ password.value.length }}</span>
+			<button type="submit" [disabled]="form.invalid" >Войти</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<form action="#" class="overlay-panel overlay-right right" [formGroup]="signup" (ngSubmit)='submitS()'>
+				<h1>Привет, друг!</h1>
+				<p>Введи свои данные и начни увлекательное путешетсвие в мир английского языка вместе с нами!</p>
+                <input type="text" placeholder="Name" formControlName="name"/>
+                <span class="alert-signup" *ngIf="name.errors?.['minlength'] && name.touched ">Слишком короткое имя. Сейчас {{ name.value.length }}</span>
+			    <input type="email" placeholder="Email" formControlName="email"/>
+                <span class="alert-signup" *ngIf="email.errors?.['minlength'] && email.touched ">Слишком короткий адрес. Сейчас {{ email.value.length }}</span>
+			    <input type="password" placeholder="Password" formControlName="password"/>
+                <span class="alert-signup" *ngIf="password.errors?.['minlength'] && password.touched ">Слишком короткий пароль. Сейчас {{ password.value.length }}</span>
+				<button type="submit" class="ghost" id="signUp" [disabled]="signup.invalid">Зарегистрироваться</button>
+			</form>
+		</div>
+	</div>
+</div>

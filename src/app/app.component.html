@@ -1,0 +1,10 @@
+<div class="page">
+    <div class="page__header">
+        <app-header></app-header>
+    </div>
+    <app-auth *ngIf="authModalService.isVisible$ | async"></app-auth>
+    <router-outlet></router-outlet>
+    <div class="page__footer" *ngIf="route !== '/audio-call-game' && route !== '/sprint-game'">
+        <app-footer></app-footer>
+    </div>
+</div>

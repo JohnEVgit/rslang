@@ -1,0 +1,78 @@
+<div class="audio-call" [ngClass]="{ 'change-audio-call__play': gameStatus === 'play'}" [ngSwitch]="gameStatus">
+  <ng-template ngSwitchCase="menu">
+    <h2>Аудиовызов</h2>
+    <div class="audio-call-menu">
+      <ol class="audio-call__rules">
+        <h3>Правила:</h3>
+        <li class="rules__item">Используйте мышь для выбора</li>
+        <li class="rules__item">Используйте цифровые клавиши 1-5 для выбора ответа </li>
+        <li class="rules__item">Используйте Enter для повторного прослушивания слова</li>
+        <li class="rules__item">Используйте Escape, чтобы начать игру заново</li>
+        <li class="rules__item">Используйте Space для перехода к следующему вопросу</li>
+      </ol>
+      <h3 *ngIf="!startFromBook">Выберите уровень сложности</h3>
+      <div *ngIf="!startFromBook" class="audio-call-menu__levels">
+        <button class="btn levels__btn"
+                *ngFor="let level of levels; let i = index"
+                (click)="
+                  chooseLevel(i);
+                  addClass($event);
+                "
+        >{{ level }}</button>
+      </div>
+      <button class="btn audio-call-menu__btn" [disabled] = "isStartDisabled" (click)="playGame();">Старт</button>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="play">
+    <h2 [style.visibility]="isAnswerChosen ? 'visible' : 'hidden'" class="audio-call__title">{{ wordQuestion?.word }}</h2>
+    <div class="audio-call-play">
+      <div class="audio-call__img-container">
+        <img class="audio-call__img" *ngIf="isAnswerChosen" [src]="'https://angular-learnwords.herokuapp.com/' + wordQuestion?.image" alt="Word img">
+      </div>
+      <div class="audio-call__sound" (click)="createAudio(wordQuestion?.audio)">
+      </div>
+      <div class="audio-call__answers">
+        <button class="btn answer__btn" *ngFor="let word of wordQuestion?.responseOptions"
+                [disabled] = "isAnswerChosen"
+                (click)="checkMouseAnswer($event, word)"
+        >{{ word }}</button>
+      </div>
+      <div class="audio-call__controls">
+        <button class="btn audio-call__exit-btn" (click)="menuGame()">Начать заново</button>
+        <button class="btn audio-call__next-btn" [disabled]="!isAnswerChosen" (click)="nextQuestion()">Следующий</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="end">
+    <h2>Статистика</h2>
+    <div class="audio-call-end">
+      <div class="audio-call__statistics">
+        <ul class="audio-call__right-answers">
+          <h3 class="answers__title">Правильные ответы ({{rightAnswers.length}}):</h3>
+          <li class="right-answers__item" *ngFor="let rightAnswer of rightAnswers">
+            <div class="item__sound" (click)="createAudio(rightAnswer.audio)"></div>
+            <p class="item__word">
+              {{ rightAnswer.word }} -
+              <span class="word-translate">{{ rightAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+        <ul class="audio-call__wrong-answers">
+          <h3 class="answers__title">Неправильные ответы ({{wrongAnswers.length}}):</h3>
+          <li class="wrong-answers__item" *ngFor="let wrongAnswer of wrongAnswers">
+            <div class="item__sound" (click)="createAudio(wrongAnswer.audio)"></div>
+            <p class="item__word">
+              {{ wrongAnswer.word }} -
+              <span class="word-translate">{{ wrongAnswer.wordTranslate }}</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <button class="btn audio-call__exit-btn" (click)="menuGame()">Начать заново</button>
+    </div>
+  </ng-template>
+</div>
+
+
