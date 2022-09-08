@@ -10,7 +10,7 @@
       ],
       "parserOptions": {
         "project": [
-          "./rslang/tsconfig.json"
+          "./tsconfig.json"
         ],
         "createDefaultProgram": true
       },

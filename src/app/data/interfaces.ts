@@ -49,5 +49,3 @@ export interface GameData {
   percent: number | undefined;
   gameLearnedWords: number;
 }
-
-

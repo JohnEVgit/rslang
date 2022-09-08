@@ -182,7 +182,10 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
         let currentStat: Stats = {};
         this.statisticService.getStatistic(userId).subscribe((stat: Stats) => {
           currentStat = stat;
-          const countPercent = (this.rightAnswersPercent + ((stat.optional?.gameAudioCall.percent === undefined ? this.rightAnswersPercent : stat.optional?.gameAudioCall.percent) || 0)) / 2;
+          const countPercent = (this.rightAnswersPercent + (
+            (stat.optional?.gameAudioCall.percent === undefined
+              ? this.rightAnswersPercent : stat.optional?.gameAudioCall.percent) || 0
+          )) / 2;
           obj = {
             learnedWords: (this.rightAnswers.length + (stat.learnedWords || 0)),
             optional: {
@@ -192,14 +195,17 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
                 gameLearnedWords: stat.optional?.gameSprint.gameLearnedWords || 0,
               },
               gameAudioCall: {
-                bestStreak: Math.max(this.bestStreak, (stat.optional?.gameAudioCall.bestStreak || 0)),
+                bestStreak:
+                Math.max(this.bestStreak, (stat.optional?.gameAudioCall.bestStreak || 0)),
                 percent: countPercent,
-                gameLearnedWords: this.rightAnswers.length + (stat.optional?.gameAudioCall.gameLearnedWords || 0),
+                gameLearnedWords:
+                this.rightAnswers.length + (stat.optional?.gameAudioCall.gameLearnedWords || 0),
               },
-              totalPercent: ((countPercent + stat.optional?.gameSprint.percent!) / 2) 
-                || countPercent || 0,
+              // eslint-disable-next-line no-unsafe-optional-chaining
+              totalPercent: ((countPercent + stat.optional?.gameSprint.percent!) / 2)
+              || countPercent || 0,
             },
-          }
+          };
           this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
         }, () => {
           obj = {
@@ -210,10 +216,18 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
                 percent: currentStat.optional?.gameSprint.percent || undefined,
                 gameLearnedWords: currentStat.optional?.gameSprint.gameLearnedWords || 0,
               },
-              gameAudioCall: { bestStreak: this.bestStreak, percent: this.rightAnswersPercent, gameLearnedWords: this.rightAnswers.length },
-              totalPercent: (this.rightAnswersPercent + ((currentStat.optional?.gameAudioCall.percent === undefined ? this.rightAnswersPercent : currentStat.optional?.gameAudioCall.percent) || 0)) / 2 || 0,
+              gameAudioCall: {
+                bestStreak: this.bestStreak,
+                percent: this.rightAnswersPercent,
+                gameLearnedWords: this.rightAnswers.length,
+              },
+              totalPercent:
+              (this.rightAnswersPercent
+              + ((currentStat.optional?.gameAudioCall.percent === undefined
+                ? this.rightAnswersPercent : currentStat.optional?.gameAudioCall.percent)
+                || 0)) / 2 || 0,
             },
-          }
+          };
           this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
         });
       }

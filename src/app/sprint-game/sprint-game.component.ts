@@ -143,7 +143,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
   }
 
   public playGame(): void {
-    this.time = 30;
+    this.time = 5;
     this.gameStatus = 'play';
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
@@ -152,43 +152,57 @@ export class SprintGameComponent implements OnInit, OnDestroy {
         this.rightAnswersPercent = Math.floor(
           (this.rightAnswers.length / (this.rightAnswers.length + this.wrongAnswers.length)) * 100,
         ) || 0;
-        if(this.authModalService.authenticated){
+        if (this.authModalService.authenticated) {
           const userId = this.authModalService.getUserId()!;
           let obj: Stats = {};
           let currentStat: Stats = {};
           this.statisticService.getStatistic(userId).subscribe((stat: Stats) => {
             currentStat = stat;
-            const countPercent = (this.rightAnswersPercent + ((stat.optional?.gameSprint.percent === undefined ? this.rightAnswersPercent : stat.optional?.gameSprint.percent) || 0)) / 2;
+            const countPercent = (this.rightAnswersPercent + (
+              (stat.optional?.gameSprint.percent === undefined
+                ? this.rightAnswersPercent : stat.optional?.gameSprint.percent) || 0)) / 2;
             obj = {
               learnedWords: (this.rightAnswers.length + (stat.learnedWords || 0)),
               optional: {
                 gameSprint: {
-                  bestStreak: Math.max(this.bestStreak, (stat.optional?.gameSprint.bestStreak || 0)),
+                  bestStreak:
+                  Math.max(this.bestStreak, (stat.optional?.gameSprint.bestStreak || 0)),
                   percent: countPercent,
-                  gameLearnedWords: this.rightAnswers.length + (stat.optional?.gameSprint.gameLearnedWords || 0),
+                  gameLearnedWords:
+                  this.rightAnswers.length + (stat.optional?.gameSprint.gameLearnedWords || 0),
                 },
                 gameAudioCall: {
                   bestStreak: stat.optional?.gameAudioCall.bestStreak || 0,
                   percent: stat.optional?.gameAudioCall.percent || undefined,
                   gameLearnedWords: stat.optional?.gameAudioCall.gameLearnedWords || 0,
                 },
+                // eslint-disable-next-line no-unsafe-optional-chaining
                 totalPercent: ((stat.optional?.gameAudioCall.percent! + countPercent) / 2)
                   || countPercent || 0,
               },
-            }
+            };
             this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
           }, () => {
             obj = {
               learnedWords: this.rightAnswers.length,
-              optional: { gameSprint: { bestStreak: this.bestStreak, percent: this.rightAnswersPercent, gameLearnedWords: this.rightAnswers.length },
-                gameAudioCall: { 
+              optional: {
+                gameSprint: {
+                  bestStreak: this.bestStreak,
+                  percent: this.rightAnswersPercent,
+                  gameLearnedWords: this.rightAnswers.length,
+                },
+                gameAudioCall: {
                   bestStreak: currentStat?.optional?.gameAudioCall.bestStreak || 0,
                   percent: currentStat?.optional?.gameAudioCall.percent || undefined,
                   gameLearnedWords: currentStat.optional?.gameAudioCall.gameLearnedWords || 0,
                 },
-                totalPercent: (this.rightAnswersPercent + ((currentStat.optional?.gameSprint.percent === undefined ? this.rightAnswersPercent : currentStat.optional?.gameSprint.percent) || 0)) / 2 || 0,
+                totalPercent:
+                (this.rightAnswersPercent
+                   + ((currentStat.optional?.gameSprint.percent === undefined
+                     ? this.rightAnswersPercent : currentStat.optional?.gameSprint.percent)
+                     || 0)) / 2 || 0,
               },
-            }
+            };
             this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
           });
         }
@@ -242,7 +256,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
           this.scorePoints *= 2;
         }
       }
-      if(this.isBestStreakContinue){
+      if (this.isBestStreakContinue) {
         this.streak += 1;
       } else {
         this.isBestStreakContinue = true;
