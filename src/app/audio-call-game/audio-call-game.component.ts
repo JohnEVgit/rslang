@@ -2,10 +2,11 @@
 import {
   Component, HostListener, OnDestroy, OnInit,
 } from '@angular/core';
-import { Word } from '../data/interfaces';
+import { Stats, Word } from '../data/interfaces';
 import { AudioCallGameService } from '../services/audio-call-game.service';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
+import { StatisticService } from '../services/statistic.service';
 
 @Component({
   selector: 'app-audio-call-game',
@@ -37,10 +38,19 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
 
   public startFromBook = false;
 
+  private streak = 0;
+
+  private bestStreak = 0;
+
+  private isBestStreakContinue = true;
+
+  private rightAnswersPercent = 0;
+
   constructor(
     private audioCallGameService: AudioCallGameService,
     private userWordsService: UserWordsService,
     private authModalService: AuthModalService,
+    private statisticService: StatisticService,
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +86,8 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.isAnswerChosen = false;
     this.rightAnswers = [];
     this.wrongAnswers = [];
+    this.streak = 0;
+    this.bestStreak = 0;
   }
 
   public addClass(event: MouseEvent) {
@@ -161,6 +173,50 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     } else {
       this.wordIndex = 0;
       this.gameStatus = 'end';
+      this.rightAnswersPercent = Math.floor(
+        (this.rightAnswers.length / (this.rightAnswers.length + this.wrongAnswers.length)) * 100,
+      ) || 0;
+      if (this.authModalService.authenticated) {
+        const userId = this.authModalService.getUserId()!;
+        let obj: Stats = {};
+        let currentStat: Stats = {};
+        this.statisticService.getStatistic(userId).subscribe((stat: Stats) => {
+          currentStat = stat;
+          const countPercent = (this.rightAnswersPercent + ((stat.optional?.gameAudioCall.percent === undefined ? this.rightAnswersPercent : stat.optional?.gameAudioCall.percent) || 0)) / 2;
+          obj = {
+            learnedWords: (this.rightAnswers.length + (stat.learnedWords || 0)),
+            optional: {
+              gameSprint: {
+                bestStreak: stat.optional?.gameSprint.bestStreak || 0,
+                percent: stat.optional?.gameSprint.percent || undefined,
+                gameLearnedWords: stat.optional?.gameSprint.gameLearnedWords || 0,
+              },
+              gameAudioCall: {
+                bestStreak: Math.max(this.bestStreak, (stat.optional?.gameAudioCall.bestStreak || 0)),
+                percent: countPercent,
+                gameLearnedWords: this.rightAnswers.length + (stat.optional?.gameAudioCall.gameLearnedWords || 0),
+              },
+              totalPercent: ((countPercent + stat.optional?.gameSprint.percent!) / 2) 
+                || countPercent || 0,
+            },
+          }
+          this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
+        }, () => {
+          obj = {
+            learnedWords: this.rightAnswers.length,
+            optional: {
+              gameSprint: {
+                bestStreak: currentStat.optional?.gameSprint.bestStreak || 0,
+                percent: currentStat.optional?.gameSprint.percent || undefined,
+                gameLearnedWords: currentStat.optional?.gameSprint.gameLearnedWords || 0,
+              },
+              gameAudioCall: { bestStreak: this.bestStreak, percent: this.rightAnswersPercent, gameLearnedWords: this.rightAnswers.length },
+              totalPercent: (this.rightAnswersPercent + ((currentStat.optional?.gameAudioCall.percent === undefined ? this.rightAnswersPercent : currentStat.optional?.gameAudioCall.percent) || 0)) / 2 || 0,
+            },
+          }
+          this.statisticService.updateStatistic(userId, obj).subscribe(() => { });
+        });
+      }
     }
   }
 
@@ -171,6 +227,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
       if (this.authModalService.authenticated) {
         this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'studied', true);
       }
+      this.getBestStreak();
     } else {
       (<HTMLElement>event.target).classList.add('wrong');
       if (this.wordQuestion) {
@@ -184,8 +241,19 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
           elem.classList.add('right');
         }
       });
+      this.isBestStreakContinue = false;
     }
     this.isAnswerChosen = true;
+  }
+
+  public getBestStreak() {
+    if (this.isBestStreakContinue) {
+      this.streak += 1;
+    } else {
+      this.isBestStreakContinue = true;
+      this.streak = 1;
+    }
+    this.bestStreak = Math.max(this.streak, this.bestStreak);
   }
 
   public createAudio(audioPath: string | undefined): void {
@@ -247,6 +315,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
         if (this.authModalService.authenticated) {
           this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'studied', true);
         }
+        this.getBestStreak();
       }
       if ((elem.textContent === word) && (elem.textContent !== this.wordQuestion?.wordTranslate)) {
         elem.classList.add('wrong');
@@ -254,6 +323,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
         if (this.authModalService.authenticated) {
           this.userWordsService.createDifficulty(this.randomWords, this.wordIndex, 'hard', false);
         }
+        this.isBestStreakContinue = false;
       } else if (elem.textContent === this.wordQuestion?.wordTranslate) {
         elem.classList.add('right');
       }

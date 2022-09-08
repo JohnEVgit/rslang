@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'sprint-game', component: SprintGameComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'statistic', component: StatisticComponent },
+  { path: '**', component: MainComponent },
 ];
 
 @NgModule({
