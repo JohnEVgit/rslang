@@ -23,16 +23,31 @@ export interface UserWord {
   optional?: Statistic;
 }
 
+export interface Statistic {
+  rightAnswers?: number;
+  wrongAnswers?: number;
+}
+
 export interface WordPage {
   paginatedResults: Word[];
   totalCount: number;
 }
 
 export interface Stats {
-  learnedWords: number;
-  optional: {};
+  learnedWords?: number;
+  optional?: GamesData;
 }
-export interface Statistic {
-  rightAnswers?: number;
-  wrongAnswers?: number;
+
+export interface GamesData {
+  gameSprint: GameData;
+  gameAudioCall: GameData;
+  totalPercent: number;
 }
+
+export interface GameData {
+  bestStreak: number;
+  percent: number | undefined;
+  gameLearnedWords: number;
+}
+
+

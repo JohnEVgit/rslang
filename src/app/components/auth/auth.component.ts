@@ -90,7 +90,6 @@ export class AuthComponent implements OnInit {
   }
 
   submitS() {
-    console.log(this.signup.value);
     const createUser = async (user: {}) => {
       const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/users', {
         method: 'POST',
