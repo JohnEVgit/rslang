@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserWord, Word, WordPage } from '../data/interfaces';
 import { SprintGameService } from './sprint-game.service';
 import { AuthModalService } from './auth-modal.service';
+import { backendUrl } from '../data/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -16,51 +17,51 @@ export class UserWordsService {
     private authModalService: AuthModalService,
   ) { }
 
-  public createUserWord(userId: string, wordId: string, obj: UserWord) {
-    return this.http.post(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
+  public createUserWord(userId: string, wordId: string, obj: UserWord): Observable<Object> {
+    return this.http.post(`${backendUrl}/users/${userId}/words/${wordId}`, obj);
   }
 
-  public createUserTextbookWord(userId: string, wordId: string, obj: UserWord) {
-    return this.http.post(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
+  public createUserTextbookWord(userId: string, wordId: string, obj: UserWord): Observable<Object> {
+    return this.http.post(`${backendUrl}/users/${userId}/words/${wordId}`, obj);
   }
 
-  public updateUserWord(userId: string, wordId: string, obj: UserWord) {
-    return this.http.put(`https://angular-learnwords.herokuapp.com/users/${userId}/words/${wordId}`, obj);
+  public updateUserWord(userId: string, wordId: string, obj: UserWord): Observable<Object> {
+    return this.http.put(`${backendUrl}/users/${userId}/words/${wordId}`, obj);
   }
 
-  public getUserTextbookWords(userId: string, group: number, page?: number) {
+  public getUserTextbookWords(userId: string, group: number, page?: number): Observable<Word[]> {
     return this.http
       .get(
-        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${page}}]}`,
+        `${backendUrl}/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${page}}]}`,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
       );
   }
 
-  public getUserHardWords(userId: string) {
+  public getUserHardWords(userId: string): Observable<Word[]> {
     return this.http
       .get(
-        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=10000&filter={"$and": [{"userWord.difficulty":"hard"}]}`,
+        `${backendUrl}/users/${userId}/aggregatedWords?wordsPerPage=10000&filter={"$and": [{"userWord.difficulty":"hard"}]}`,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
       );
   }
 
-  public getUserWord(userId: string, wordId: string) {
-    return this.http.get(`https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords/${wordId}`).pipe(
+  public getUserWord(userId: string, wordId: string): Observable<Word> {
+    return this.http.get(`${backendUrl}/users/${userId}/aggregatedWords/${wordId}`).pipe(
       switchMap((words) => of((words as Array<Word>)[0])),
     );
   }
 
-  public getUserWords(userId: string, group: number, page?: number) {
+  public getUserWords(userId: string, group: number, page?: number): Observable<Word[]> {
     let wordsPage = page;
     if (page === undefined) {
       wordsPage = this.sprintGameService.getRandomPage();
       return this.http
         .get(
-          `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,
+          `${backendUrl}/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,
         )
         .pipe(
           switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
@@ -68,7 +69,8 @@ export class UserWordsService {
     }
     return this.http
       .get(
-        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$or": [{"userWord.difficulty":"hard"}, {"userWord.difficulty":"empty"},{"userWord":null}], "$and": [{"group": ${group}}, {"page": ${wordsPage}}]} `,
+        `${backendUrl}/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$or": [{"userWord.difficulty":"hard"},
+         {"userWord.difficulty":"empty"},{"userWord":null}], "$and": [{"group": ${group}}, {"page": ${wordsPage}}]} `,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),

@@ -8,6 +8,7 @@ import { Stats, Word } from '../data/interfaces';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 import { StatisticService } from '../services/statistic.service';
+import { backendUrl, lastPage, rightAnswerAudioPath, wrongAnswerAudioPath } from '../data/constants';
 
 @Component({
   selector: 'app-sprint-game',
@@ -78,13 +79,13 @@ export class SprintGameComponent implements OnInit, OnDestroy {
     this.sprintGameService.startFromBook = false;
   }
 
-  public chooseLevel(group: number) {
+  public chooseLevel(group: number): void {
     this.sprintGameService.group = group;
     this.sprintGameService.pagesArray = [];
     this.getWords(this.sprintGameService.group);
   }
 
-  private getWords(group: number, page?: number) {
+  private getWords(group: number, page?: number): void {
     this.randomWords = [];
     this.wordIndex = 0;
     if (!this.authModalService.authenticated) {
@@ -111,19 +112,16 @@ export class SprintGameComponent implements OnInit, OnDestroy {
       this.userWordsService.getUserWords(userId, group, page)
         .subscribe((words) => {
           this.randomWords = words;
-          console.log(this.randomWords);
           this.addAdditionalWords(userId, group, page);
         });
     }
   }
 
-  private addAdditionalWords(userId: string, group: number, page?: number) {
+  private addAdditionalWords(userId: string, group: number, page?: number): void {
     let newPage = page;
-    if (newPage !== undefined && newPage !== 29) {
+    if (newPage !== undefined && newPage !== lastPage) {
       newPage += 1;
       this.userWordsService.getUserWords(userId, group, newPage).subscribe((newWords) => {
-        console.log(newWords);
-        console.log(newPage);
         if (newWords.length) {
           newWords.forEach((newWord) => {
             if (this.randomWords.length < 200) {
@@ -161,7 +159,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
     return this.wordTranslateIndex;
   }
 
-  public addClass(event: MouseEvent) {
+  public addClass(event: MouseEvent): void {
     this.prevClass?.classList.remove('active');
     (<HTMLElement>event?.target).classList.add('active');
     this.prevClass = (<HTMLElement>event.target);
@@ -263,11 +261,11 @@ export class SprintGameComponent implements OnInit, OnDestroy {
     this.bestStreak = 0;
   }
 
-  public checkAnswer(isRight: boolean) {
+  public checkAnswer(isRight: boolean): void {
     const word: Word = this.randomWords[this.wordIndex];
     if ((isRight && word.wordTranslate === this.wordTranslate)
        || (!isRight && word.wordTranslate !== this.wordTranslate)) {
-      this.createAudio('./assets/audio/answer-right.mp3');
+      this.createAudio(rightAnswerAudioPath);
       this.currentStreak += 1;
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
@@ -288,7 +286,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
       }
       this.bestStreak = Math.max(this.streak, this.bestStreak);
     } else {
-      this.createAudio('./assets/audio/answer-wrong.mp3');
+      this.createAudio(wrongAnswerAudioPath);
       this.currentStreak = 0;
       this.scorePoints = 10;
       this.wrongAnswers.push(word);
@@ -305,7 +303,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
     if (audioPath) {
       const audio = new Audio();
       if (isWordAudio) {
-        audio.src = `https://angular-learnwords.herokuapp.com/${audioPath}`;
+        audio.src = `${backendUrl}/${audioPath}`;
       } else {
         audio.src = audioPath;
         audio.volume = 0.2;

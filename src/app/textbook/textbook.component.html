@@ -31,7 +31,7 @@
         <div class="main__textbook textbook">
             <div class="textbook__elem" *ngFor="let word of words | paginate: { id: 'server', itemsPerPage: wordsPerPage, currentPage: page, totalItems: total }; index as i">
                 <div class="textbook__picture">
-                    <img class="textbook__img" [src]="backendUrl + word.image" [alt]="word.word">
+                    <img class="textbook__img" [src]="backendUrl + '/' + word.image" [alt]="word.word">
                     <div class="textbook__progress" *ngIf="isAuth && word.userWord">
                         <div class="textbook__correct">
                             <svg class="textbook__svg" width="20" height="20" aria-hidden="true">

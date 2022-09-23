@@ -13,31 +13,30 @@ export class AuthModalService {
 
   authenticated = false;
 
-  open() {
+  open(): void {
     this.isVisible$.next(true);
   }
 
-  close() {
+  close(): void {
     this.isVisible$.next(false);
   }
 
-  clearStorage() {
+  clearStorage(): void {
     if (localStorage.length > 0) {
       this.local.clear();
       this.authenticated = false;
     }
   }
 
-  public getToken() {
+  public getToken(): string | null {
     return this.local.getItem('JWT');
   }
 
-  public getUserId() {
+  public getUserId(): string | null {
     return this.local.getItem('ID');
   }
 
-  public checkAuthenticated() {
+  public checkAuthenticated(): void {
     this.authenticated = !!this.local.getItem('JWT');
   }
-
 }

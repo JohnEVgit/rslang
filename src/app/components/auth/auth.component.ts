@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { backendUrl } from 'src/app/data/constants';
 import { AuthModalService } from 'src/app/services/auth-modal.service';
 
 @Component({
@@ -67,7 +68,7 @@ export class AuthComponent implements OnInit {
 
   submit() {
     const loginUser = async (user:{}) => {
-      const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/signin', {
+      const rawResponse = await fetch(`${backendUrl}/signin`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -91,7 +92,7 @@ export class AuthComponent implements OnInit {
 
   submitS() {
     const createUser = async (user: {}) => {
-      const rawResponse = await fetch('https://angular-learnwords.herokuapp.com/users', {
+      const rawResponse = await fetch(`${backendUrl}/users`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

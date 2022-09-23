@@ -6,6 +6,7 @@ import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 import { SprintGameService } from '../services/sprint-game.service';
 import { AudioCallGameService } from '../services/audio-call-game.service';
+import { backendUrl } from '../data/constants';
 
 @Component({
   selector: 'app-textbook',
@@ -15,9 +16,9 @@ import { AudioCallGameService } from '../services/audio-call-game.service';
 export class TextbookComponent implements OnInit {
   words: Word[] = [];
 
-  backendUrl = 'https://angular-learnwords.herokuapp.com/';
-
   isPlayAudio = false;
+
+  backendUrl = backendUrl;
 
   currentId = '';
 
@@ -62,7 +63,7 @@ export class TextbookComponent implements OnInit {
     this.loading = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    this.http.get<Word[]>(`${this.backendUrl}words?group=${this.group - 1}&page=${page - 1}`).subscribe((response) => {
+    this.http.get<Word[]>(`${backendUrl}/words?group=${this.group - 1}&page=${page - 1}`).subscribe((response) => {
       this.words = response;
       this.page = page;
       this.loading = false;
@@ -118,17 +119,17 @@ export class TextbookComponent implements OnInit {
   playAudio(id: string): void {
     this.currentId = id;
 
-    this.http.get<Word>(`${this.backendUrl}words/${id}`).subscribe((response) => {
-      let audio = new Audio(`${this.backendUrl}${response.audio}`);
+    this.http.get<Word>(`${backendUrl}/words/${id}`).subscribe((response) => {
+      let audio = new Audio(`${backendUrl}/${response.audio}`);
       audio.play();
       this.isPlayAudio = true;
 
       audio.addEventListener('ended', () => {
-        audio = new Audio(`${this.backendUrl}${response.audioMeaning}`);
+        audio = new Audio(`${backendUrl}/${response.audioMeaning}`);
         audio.play();
 
         audio.addEventListener('ended', () => {
-          audio = new Audio(`${this.backendUrl}${response.audioExample}`);
+          audio = new Audio(`${backendUrl}/${response.audioExample}`);
           audio.play();
 
           audio.addEventListener('ended', () => {
@@ -144,7 +145,10 @@ export class TextbookComponent implements OnInit {
     this.userWordsService.getUserWord(userId, id).subscribe((word) => {
       const obj = {
         difficulty: 'empty',
-        optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+        optional: {
+          rightAnswers: word.userWord?.optional?.rightAnswers,
+          wrongAnswers: word.userWord?.optional?.wrongAnswers,
+        },
       };
 
       this.userWordsService
@@ -162,7 +166,10 @@ export class TextbookComponent implements OnInit {
         if (word.userWord?.difficulty === difficulty) {
           const obj = {
             difficulty: 'empty',
-            optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+            optional: {
+              rightAnswers: word.userWord?.optional?.rightAnswers,
+              wrongAnswers: word.userWord?.optional?.wrongAnswers,
+            },
           };
 
           this.userWordsService
@@ -173,7 +180,10 @@ export class TextbookComponent implements OnInit {
         } else if (word.userWord?.difficulty !== difficulty) {
           const obj = {
             difficulty,
-            optional: { rightAnswers: word.userWord?.optional?.rightAnswers, wrongAnswers: word.userWord?.optional?.wrongAnswers },
+            optional: {
+              ightAnswers: word.userWord?.optional?.rightAnswers,
+              wrongAnswers: word.userWord?.optional?.wrongAnswers,
+            },
           };
 
           this.userWordsService

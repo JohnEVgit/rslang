@@ -7,6 +7,7 @@ import { AudioCallGameService } from '../services/audio-call-game.service';
 import { UserWordsService } from '../services/user-words.service';
 import { AuthModalService } from '../services/auth-modal.service';
 import { StatisticService } from '../services/statistic.service';
+import { backendUrl } from '../data/constants';
 
 @Component({
   selector: 'app-audio-call-game',
@@ -74,7 +75,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.generateQuestion(this.randomWords, this.wordIndex);
   }
 
-  public menuGame() {
+  public menuGame(): void {
     this.gameStatus = 'menu';
     this.wordIndex = 0;
     this.wordQuestion = undefined;
@@ -90,19 +91,19 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.bestStreak = 0;
   }
 
-  public addClass(event: MouseEvent) {
+  public addClass(event: MouseEvent): void {
     this.prevClass?.classList.remove('active');
     (<HTMLElement>event?.target).classList.add('active');
     this.prevClass = (<HTMLElement>event.target);
   }
 
-  public chooseLevel(group: number) {
+  public chooseLevel(group: number): void {
     this.audioCallGameService.group = group;
     this.isStartDisabled = true;
     this.getWords(group);
   }
 
-  private getWords(group: number, page?: number) {
+  private getWords(group: number, page?: number): void {
     if (!this.authModalService.authenticated) {
       this.audioCallGameService.getWords(group, page)
         .subscribe((words) => {
@@ -138,7 +139,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     }
   }
 
-  private addAdditionalWords(userId: string, group: number, page?: number) {
+  private addAdditionalWords(userId: string, group: number, page?: number): void {
     let newPage = page;
     if (newPage !== undefined) {
       newPage += 1;
@@ -180,7 +181,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     });
   }
 
-  public nextQuestion() {
+  public nextQuestion(): void {
     this.isAnswerChosen = false;
     document.querySelectorAll('.answer__btn').forEach((elem) => {
       elem.classList.remove('right');
@@ -279,7 +280,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     this.isAnswerChosen = true;
   }
 
-  public getBestStreak() {
+  public getBestStreak(): void {
     if (this.isBestStreakContinue) {
       this.streak += 1;
     } else {
@@ -292,7 +293,7 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
   public createAudio(audioPath: string | undefined): void {
     if (audioPath) {
       const audio = new Audio();
-      audio.src = `https://angular-learnwords.herokuapp.com/${audioPath}`;
+      audio.src = `${backendUrl}/${audioPath}`;
       audio.load();
       audio.play();
     }
