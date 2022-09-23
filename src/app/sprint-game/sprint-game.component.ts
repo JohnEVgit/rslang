@@ -108,14 +108,39 @@ export class SprintGameComponent implements OnInit, OnDestroy {
         });
     } else if (this.authModalService.authenticated && this.sprintGameService.startFromBook) {
       const userId = this.authModalService.getUserId()!;
-      this.userWordsService.getUserTextbookWords(userId, group, page)
+      this.userWordsService.getUserWords(userId, group, page)
         .subscribe((words) => {
-          words.forEach((word) => {
-            this.randomWords.push(word);
-          });
-          this.generateQuestion();
-          this.isStartDisabled = false;
+          this.randomWords = words;
+          console.log(this.randomWords);
+          this.addAdditionalWords(userId, group, page);
         });
+    }
+  }
+
+  private addAdditionalWords(userId: string, group: number, page?: number) {
+    let newPage = page;
+    if (newPage !== undefined && newPage !== 29) {
+      newPage += 1;
+      this.userWordsService.getUserWords(userId, group, newPage).subscribe((newWords) => {
+        console.log(newWords);
+        console.log(newPage);
+        if (newWords.length) {
+          newWords.forEach((newWord) => {
+            if (this.randomWords.length < 200) {
+              this.randomWords.push(newWord);
+            }
+          });
+          if (this.randomWords.length < 200) {
+            this.addAdditionalWords(userId, group, newPage);
+          } else {
+            this.generateQuestion();
+            this.isStartDisabled = false;
+          }
+        }
+      });
+    } else {
+      this.generateQuestion();
+      this.isStartDisabled = false;
     }
   }
 
@@ -143,7 +168,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
   }
 
   public playGame(): void {
-    this.time = 5;
+    this.time = 30;
     this.gameStatus = 'play';
     timer(1000, 1000).pipe(takeUntil(this.timer)).subscribe(() => {
       this.time -= 1;
@@ -211,7 +236,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
   }
 
   public nextQuestion(): void {
-    if (this.wordIndex !== this.randomWords.length) {
+    if (this.wordIndex !== this.randomWords.length - 1) {
       this.generateQuestion();
     } else {
       this.getWords(this.sprintGameService.group);
@@ -236,14 +261,13 @@ export class SprintGameComponent implements OnInit, OnDestroy {
     this.sprintGameService.pagesArray = [];
     this.streak = 0;
     this.bestStreak = 0;
-    this.ngOnInit();
   }
 
   public checkAnswer(isRight: boolean) {
     const word: Word = this.randomWords[this.wordIndex];
     if ((isRight && word.wordTranslate === this.wordTranslate)
        || (!isRight && word.wordTranslate !== this.wordTranslate)) {
-      this.createAudio('../../assets/audio/answer-right.mp3');
+      this.createAudio('./assets/audio/answer-right.mp3');
       this.currentStreak += 1;
       this.score += this.scorePoints;
       this.rightAnswers.push(word);
@@ -264,7 +288,7 @@ export class SprintGameComponent implements OnInit, OnDestroy {
       }
       this.bestStreak = Math.max(this.streak, this.bestStreak);
     } else {
-      this.createAudio('../../assets/audio/answer-wrong.mp3');
+      this.createAudio('./assets/audio/answer-wrong.mp3');
       this.currentStreak = 0;
       this.scorePoints = 10;
       this.wrongAnswers.push(word);

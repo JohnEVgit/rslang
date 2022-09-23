@@ -21,7 +21,7 @@ export class TextbookComponent implements OnInit {
 
   currentId = '';
 
-  isHardPage: boolean = Boolean(localStorage.getItem('isHard')) || false;
+  isHardPage: boolean = localStorage.getItem('isHard') === 'false' ? false : true || false;
 
   isAuth: boolean = this.authModalService.authenticated;
 
@@ -79,7 +79,6 @@ export class TextbookComponent implements OnInit {
     const userId = this.authModalService.getUserId()!;
     this.userWordsService.getUserTextbookWords(userId, this.group - 1, page - 1)
       .subscribe((response) => {
-        this.audioCallGameService.words = response;
         this.words = response;
         this.page = page;
         this.loading = false;

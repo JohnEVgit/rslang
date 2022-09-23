@@ -17,7 +17,7 @@
                         [ngClass]="{ 'group__btn--is-active': isHardPage }"
                         (click)="changeGroupHard()">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
-                            <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
+                            <use href="./assets/img/sprite.svg#svg-icon-lightning"></use>
                         </svg>
                     </button>
                 </li>
@@ -35,13 +35,13 @@
                     <div class="textbook__progress" *ngIf="isAuth && word.userWord">
                         <div class="textbook__correct">
                             <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
-                                <use href="../../assets/img/sprite.svg#svg-icon-check2"></use>
+                                <use href="./assets/img/sprite.svg#svg-icon-check2"></use>
                             </svg>
                             <span class="textbook__count">{{word.userWord.optional?.rightAnswers}}</span>
                         </div>
                         <div class="textbook__incorrect">
                             <svg class="textbook__svg" width="20" height="20" aria-hidden="true">
-                                <use href="../../assets/img/sprite.svg#svg-icon-close"></use>
+                                <use href="./assets/img/sprite.svg#svg-icon-close"></use>
                             </svg>
                             <span class="textbook__count">{{word.userWord.optional?.wrongAnswers}}</span>
                         </div>
@@ -57,7 +57,7 @@
                     [disabled]="isPlayAudio"
                     >
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
-                            <use href="../../assets/img/sprite.svg#svg-icon-audio"></use>
+                            <use href="./assets/img/sprite.svg#svg-icon-audio"></use>
                         </svg>
                     </button>
                     <button class="textbook__difficult" type="button" aria-label="Добавить в сложные слова/убрать из сложных слов"
@@ -65,7 +65,7 @@
                     *ngIf="isAuth && !isHardPage"
                     [class.textbook__difficult--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'hard'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
-                            <use href="../../assets/img/sprite.svg#svg-icon-lightning"></use>
+                            <use href="./assets/img/sprite.svg#svg-icon-lightning"></use>
                         </svg>
                     </button>
                     <button class="textbook__learned" type="button" aria-label="Добавить в изученные/убрать из изученных"
@@ -73,14 +73,14 @@
                     *ngIf="isAuth && !isHardPage"
                     [class.textbook__learned--is-active]="isAuth && word.userWord && word.userWord.difficulty === 'studied'">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
-                            <use href="../../assets/img/sprite.svg#svg-icon-check"></use>
+                            <use href="./assets/img/sprite.svg#svg-icon-check"></use>
                         </svg>
                     </button>
                     <button class="textbook__delete" type="button" aria-label="Удалить из сложных слов"
                     (click)="deleteDifficult(word._id || word.id)"
                     *ngIf="isAuth && isHardPage">
                         <svg class="textbook__svg" width="24" height="24" aria-hidden="true">
-                            <use href="../../assets/img/sprite.svg#svg-icon-delete"></use>
+                            <use href="./assets/img/sprite.svg#svg-icon-delete"></use>
                         </svg>
                     </button>
                     <p class="textbook__under">

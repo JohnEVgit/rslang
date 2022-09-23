@@ -56,12 +56,19 @@ export class UserWordsService {
 
   public getUserWords(userId: string, group: number, page?: number) {
     let wordsPage = page;
-    if (!page) {
+    if (page === undefined) {
       wordsPage = this.sprintGameService.getRandomPage();
+      return this.http
+        .get(
+          `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,
+        )
+        .pipe(
+          switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),
+        );
     }
     return this.http
       .get(
-        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and": [{"group": ${group}}, {"page": ${wordsPage}}]}`,
+        `https://angular-learnwords.herokuapp.com/users/${userId}/aggregatedWords?wordsPerPage=20&filter={"$or": [{"userWord.difficulty":"hard"}, {"userWord.difficulty":"empty"},{"userWord":null}], "$and": [{"group": ${group}}, {"page": ${wordsPage}}]} `,
       )
       .pipe(
         switchMap((words) => of((words as Array<WordPage>)[0].paginatedResults)),

@@ -124,25 +124,44 @@ export class AudioCallGameComponent implements OnInit, OnDestroy {
     }
     if (this.authModalService.authenticated && this.audioCallGameService.startFromBook) {
       const userId = this.authModalService.getUserId()!;
-      this.userWordsService.getUserTextbookWords(userId, group, page)
+      this.userWordsService.getUserWords(userId, group, page)
         .subscribe((words) => {
           this.randomWords = words;
-          this.getRandomWordTranslate();
-          this.getRandomAnswers(words);
-          this.isStartDisabled = false;
+          if (this.randomWords.length < 20) {
+            this.addAdditionalWords(userId, group, page);
+          } else {
+            this.getRandomWordTranslate();
+            this.getRandomAnswers(this.randomWords);
+            this.isStartDisabled = false;
+          }
         });
+    }
+  }
+
+  private addAdditionalWords(userId: string, group: number, page?: number) {
+    let newPage = page;
+    if (newPage !== undefined) {
+      newPage += 1;
+      this.userWordsService.getUserWords(userId, group, newPage).subscribe((newWords) => {
+        newWords.forEach((newWord) => {
+          if (this.randomWords.length < 20) {
+            this.randomWords.push(newWord);
+          }
+        });
+        if (this.randomWords.length < 20) {
+          this.addAdditionalWords(userId, group, newPage);
+        } else {
+          this.getRandomWordTranslate();
+          this.getRandomAnswers(this.randomWords);
+          this.isStartDisabled = false;
+        }
+      });
     }
   }
 
   private getRandomWordTranslate(): void {
     this.randomWordsTranslate = [];
-    if (this.authModalService.authenticated && this.audioCallGameService.startFromBook) {
-      this.audioCallGameService.words.forEach((word) => {
-        this.randomWordsTranslate.push(word.wordTranslate);
-      });
-    } else {
-      this.randomWords.forEach((element) => this.randomWordsTranslate.push(element.wordTranslate));
-    }
+    this.randomWords.forEach((word) => this.randomWordsTranslate.push(word.wordTranslate));
   }
 
   private getRandomAnswers(words: Word[]): void {
